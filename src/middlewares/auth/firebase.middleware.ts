@@ -39,15 +39,6 @@ export class FirebaseMiddleware {
         uid: user.uid,
         image: user?.picture,
       };
-
-      const existingParticipant = await this.prisma.participant.findUnique({
-        where: {
-          uid: user.uid,
-        },
-      });
-
-      req.user.role = existingParticipant ? 'PARTICIPANT' : undefined;
-
       next();
     } catch (error) {
       if (error instanceof FirebaseAuthError) {

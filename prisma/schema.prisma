@@ -49,7 +49,7 @@ model Event {
   paid               Boolean
   images             String[]
   name               String
-  society            Society            @relation(fields: [societyId], references: [id])
+  society            Society            @relation(fields: [societyId], references: [id], onDelete: Cascade)
   societyId          String
   about              String
   websiteUrl         String?
@@ -74,7 +74,7 @@ model EventDetail {
   to        DateTime
   type      EventType
   venueId   String
-  venue     Venue     @relation(fields: [venueId], references: [id])
+  venue     Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
   about     String
   images    String[]
   createdAt DateTime  @default(now())
@@ -90,18 +90,18 @@ model Venue {
 
 model EventParticipant {
   participantId String
-  participant   Participant @relation(fields: [participantId], references: [id])
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
   eventId       String
-  event         Event       @relation(fields: [eventId], references: [id])
+  event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@id([participantId, eventId])
 }
 
 model FavoriteEvent {
   participantId String
-  participant   Participant @relation(fields: [participantId], references: [id])
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
   eventId       String
-  event         Event       @relation(fields: [eventId], references: [id])
+  event         Event       @relation(fields: [eventId], references: [id],onDelete: Cascade)
 
   @@id([participantId, eventId])
 }
