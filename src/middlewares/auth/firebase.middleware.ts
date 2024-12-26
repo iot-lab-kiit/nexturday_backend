@@ -1,47 +1,53 @@
 import { FirebaseAuthError, getAuth } from 'firebase-admin/auth';
-import { MethodBinder } from '../../utils';
+import { CustomError, MethodBinder } from '../../utils';
 import { FirebaseProvider } from '../../libs/firebase';
 import { NextFunction, Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 
-export class AuthMiddleware {
+export class FirebaseMiddleware {
   private firebaseProvider: typeof FirebaseProvider;
+  private prisma: PrismaClient;
 
   constructor() {
     MethodBinder.bind(this);
     this.firebaseProvider = FirebaseProvider;
+    this.prisma = new PrismaClient();
   }
 
   async verify(req: Request, res: Response, next: NextFunction) {
-    if (req.headers.authorization == null)
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        message: 'token is required',
-      });
-
-    const token = req.headers.authorization.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: 'token is required',
+        message: 'Authorization token is required',
       });
     }
+
+    const token = req.headers.authorization?.split(' ')[1] as string;
     try {
       const user = await getAuth(this.firebaseProvider.firebase).verifyIdToken(
         token,
       );
+
       if (!user.email?.endsWith('@kiit.ac.in')) {
-        return res.status(401).json({
-          success: false,
-          message: 'kiit email allowed',
-        });
+        throw new CustomError('kiit email allowed', 401);
       }
 
       req.user = {
         email: user.email,
         name: user.name,
         uid: user.uid,
-        picture: user?.picture,
+        image: user?.picture,
       };
+
+      const existingParticipant = await this.prisma.participant.findUnique({
+        where: {
+          uid: user.uid,
+        },
+      });
+
+      req.user.role = existingParticipant ? 'PARTICIPANT' : undefined;
+
       next();
     } catch (error) {
       if (error instanceof FirebaseAuthError) {

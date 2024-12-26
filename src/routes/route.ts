@@ -1,7 +1,7 @@
 import { Application } from 'express';
 import { HomeRoute } from './home.route';
 import {
-  AuthMiddleware,
+  FirebaseMiddleware,
   GlobalErrorMiddleware,
   NotFoundMiddleware,
   PrismaErrorMiddleware,
@@ -9,13 +9,13 @@ import {
 
 export class Routes {
   private homeRoute: HomeRoute;
-  private authMiddleware: AuthMiddleware;
+  private firebaseMiddleware: FirebaseMiddleware;
 
   constructor(private app: Application) {
     this.homeRoute = new HomeRoute();
-    this.authMiddleware = new AuthMiddleware();
+    this.firebaseMiddleware = new FirebaseMiddleware();
 
-    this.app.use(this.authMiddleware.verify);
+    this.app.use(this.firebaseMiddleware.verify);
     this.app.use('/api', this.homeRoute.router);
     this.app.use(NotFoundMiddleware.handle);
     this.app.use(PrismaErrorMiddleware.handle);

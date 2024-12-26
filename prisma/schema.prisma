@@ -13,3 +13,100 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DATABASE_DIRECT_URL")
 }
+
+model Participant {
+  id              String             @id @default(uuid())
+  uid             String             @unique
+  rollNo          String
+  branch          String
+  name            String
+  email           String             @unique
+  phoneNumber     String
+  whatsappNumber  String
+  studyYear       Int
+  imageUrl        String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  attemptedEvents EventParticipant[]
+  favoriteEvents  FavoriteEvent[]
+}
+
+model Society {
+  id          String   @id @default(uuid())
+  uid         String   @unique
+  name        String
+  email       String
+  password    String
+  phoneNumber String
+  websiteUrl  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  events      Event[]
+}
+
+model Event {
+  id                 String             @id @default(uuid())
+  paid               Boolean
+  images             String[]
+  name               String
+  society            Society            @relation(fields: [societyId], references: [id])
+  societyId          String
+  about              String
+  websiteUrl         String?
+  emails             String[]
+  guidlines          String[]
+  phoneNumbers       String[]
+  registrationUrl    String?
+  price              Int                @default(0)
+  from               DateTime
+  to                 DateTime
+  participationCount Int                @default(0)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  EventParticipants  EventParticipant[]
+  fovoriteBy         FavoriteEvent[]
+}
+
+model EventDetail {
+  id        String    @id @default(uuid())
+  name      String
+  from      DateTime
+  to        DateTime
+  type      EventType
+  venueId   String
+  venue     Venue     @relation(fields: [venueId], references: [id])
+  about     String
+  images    String[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Venue {
+  id           String        @id @default(uuid())
+  mapUrl       String
+  name         String
+  eventDetails EventDetail[]
+}
+
+model EventParticipant {
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  eventId       String
+  event         Event       @relation(fields: [eventId], references: [id])
+
+  @@id([participantId, eventId])
+}
+
+model FavoriteEvent {
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  eventId       String
+  event         Event       @relation(fields: [eventId], references: [id])
+
+  @@id([participantId, eventId])
+}
+
+enum EventType {
+  ONLINE
+  OFFLINE
+}

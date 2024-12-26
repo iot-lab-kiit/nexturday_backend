@@ -1,1 +1,2 @@
-export * from './auth.middleware';
+export * from './firebase.middleware';
+export * from './role.middleware';

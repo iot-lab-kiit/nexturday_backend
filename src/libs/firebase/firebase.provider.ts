@@ -6,7 +6,8 @@ class Firebase {
   public firebase: App;
 
   constructor() {
-    const CERT = JSON.parse(process.env.PRIVATE_KEY as string).key;
+    // const CERT = JSON.parse(process.env.PRIVATE_KEY as string).key;
+    const CERT = process.env.PRIVATE_KEY ;
     console.log(CERT);
     this.firebase = initializeApp({
       credential: credential.cert({
