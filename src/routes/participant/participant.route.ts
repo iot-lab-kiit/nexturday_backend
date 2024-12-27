@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { ParticipantController } from '../../controllers';
+import { ValidationMiddleware } from '../../middlewares';
+import { CreateParticipantDto, UpdateParticipantDto } from '../../common/dtos';
 
 export class ParticipantRoute {
   public router: Router;
@@ -8,11 +10,21 @@ export class ParticipantRoute {
   constructor() {
     this.router = Router();
     this.participantController = new ParticipantController();
+
+    this.initializeRoutes();
   }
 
-  initializeRoutes() {
-    this.router.post('/', this.participantController.createParticipant);
+  private initializeRoutes() {
+    this.router.post(
+      '/',
+      new ValidationMiddleware([CreateParticipantDto, 'body']).validate,
+      this.participantController.createParticipant,
+    );
     this.router.get('/', this.participantController.getProfile);
-    this.router.patch('/', this.participantController.updateProfile);
+    this.router.patch(
+      '/',
+      new ValidationMiddleware([UpdateParticipantDto, 'body']).validate,
+      this.participantController.updateProfile,
+    );
   }
 }

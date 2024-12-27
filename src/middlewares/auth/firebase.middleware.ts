@@ -3,6 +3,7 @@ import { CustomError, MethodBinder } from '../../utils';
 import { FirebaseProvider } from '../../libs/firebase';
 import { NextFunction, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { IFirebaseUser } from '../../interfaces/express/user.interface';
 
 export class FirebaseMiddleware {
   private firebaseProvider: typeof FirebaseProvider;
@@ -17,10 +18,7 @@ export class FirebaseMiddleware {
   async verify(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Authorization token is required',
-      });
+      throw new CustomError('Authorization token is required', 401);
     }
 
     const token = req.headers.authorization?.split(' ')[1] as string;
@@ -38,7 +36,7 @@ export class FirebaseMiddleware {
         name: user.name,
         uid: user.uid,
         image: user?.picture,
-      };
+      } as IFirebaseUser;
       next();
     } catch (error) {
       if (error instanceof FirebaseAuthError) {

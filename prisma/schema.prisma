@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi", "fullTextSearch"]
 }
 
 datasource db {
@@ -63,8 +64,9 @@ model Event {
   participationCount Int                @default(0)
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  EventParticipants  EventParticipant[]
+  participants       EventParticipant[]
   fovoriteBy         FavoriteEvent[]
+  details            EventDetail[]
 }
 
 model EventDetail {
@@ -75,6 +77,8 @@ model EventDetail {
   type      EventType
   venueId   String
   venue     Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  eventId   String
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   about     String
   images    String[]
   createdAt DateTime  @default(now())
@@ -101,7 +105,7 @@ model FavoriteEvent {
   participantId String
   participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
   eventId       String
-  event         Event       @relation(fields: [eventId], references: [id],onDelete: Cascade)
+  event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@id([participantId, eventId])
 }
