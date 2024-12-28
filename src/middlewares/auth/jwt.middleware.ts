@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, verify } from 'jsonwebtoken';
 import { IJwtUser } from '../../interfaces/express/user.interface';
 import { CustomError, MethodBinder } from '../../utils';
+import 'dotenv/config';
 
 export class JWTMiddleware {
   constructor() {
@@ -22,6 +23,7 @@ export class JWTMiddleware {
         email: user.email,
         name: user.name,
         sub: user.sub,
+        role: 'SOCIETY',
         image: user?.image,
       } as IJwtUser;
       next();

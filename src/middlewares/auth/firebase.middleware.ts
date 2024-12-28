@@ -2,17 +2,14 @@ import { FirebaseAuthError, getAuth } from 'firebase-admin/auth';
 import { CustomError, MethodBinder } from '../../utils';
 import { FirebaseProvider } from '../../libs/firebase';
 import { NextFunction, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { IFirebaseUser } from '../../interfaces/express/user.interface';
 
 export class FirebaseMiddleware {
   private firebaseProvider: typeof FirebaseProvider;
-  private prisma: PrismaClient;
 
   constructor() {
     MethodBinder.bind(this);
     this.firebaseProvider = FirebaseProvider;
-    this.prisma = new PrismaClient();
   }
 
   async verify(req: Request, res: Response, next: NextFunction) {
@@ -35,6 +32,7 @@ export class FirebaseMiddleware {
         email: user.email,
         name: user.name,
         uid: user.uid,
+        role: 'PARTICIPANT',
         image: user?.picture,
       } as IFirebaseUser;
       next();

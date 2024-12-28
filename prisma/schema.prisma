@@ -65,7 +65,7 @@ model Event {
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   participants       EventParticipant[]
-  fovoriteBy         FavoriteEvent[]
+  favoriteBy         FavoriteEvent[]
   details            EventDetail[]
 }
 

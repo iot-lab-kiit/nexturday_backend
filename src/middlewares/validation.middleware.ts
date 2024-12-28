@@ -2,13 +2,12 @@ import { validateOrReject, ValidationError } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { MethodBinder } from '../utils';
+import { TNonEmptyArray } from '../interfaces';
 
 type TValidationConfig = [
   new () => object,
   keyof Pick<Request, 'body' | 'query' | 'params'>,
 ];
-
-type TNonEmptyArray<T> = [T, ...T[]];
 
 export class ValidationMiddleware {
   private validations: TNonEmptyArray<TValidationConfig>;

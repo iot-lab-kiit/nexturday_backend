@@ -39,7 +39,7 @@ export class ParticipantController {
   ): Promise<void> {
     try {
       const result = await this.participantService.getProfile(
-        (req.user as IFirebaseUser)?.uid as string,
+        (req.user as IFirebaseUser).uid,
       );
       res.status(200).json(result);
     } catch (error) {
@@ -54,7 +54,7 @@ export class ParticipantController {
     try {
       const dto = plainToInstance(UpdateParticipantDto, req.body);
       const result = await this.participantService.updateProfile(
-        (req.user as IFirebaseUser)?.uid as string,
+        (req.user as IFirebaseUser).uid,
         dto,
       );
       res.status(200).json(result);
