@@ -4,15 +4,15 @@ import { plainToInstance } from 'class-transformer';
 import { MethodBinder } from '../utils';
 import { TNonEmptyArray } from '../interfaces';
 
-type TValidationConfig = [
-  new () => object,
+type TValidationConfig<T> = [
+  new (data: T) => object,
   keyof Pick<Request, 'body' | 'query' | 'params'>,
 ];
 
 export class ValidationMiddleware {
-  private validations: TNonEmptyArray<TValidationConfig>;
+  private validations: TNonEmptyArray<TValidationConfig<any>>;
 
-  constructor(...validations: TNonEmptyArray<TValidationConfig>) {
+  constructor(...validations: TNonEmptyArray<TValidationConfig<any>>) {
     MethodBinder.bind(this);
     this.validations = validations;
   }
@@ -20,9 +20,18 @@ export class ValidationMiddleware {
   async validate(req: Request, res: Response, next: NextFunction) {
     try {
       for (const [DtoClass, target] of this.validations) {
-        const dto = plainToInstance(DtoClass, req[target]);
-        await validateOrReject(dto, { whitelist: true });
-        req[target] = dto;
+        console.log(
+          DtoClass.prototype.constructor.toString() !==
+            `class ${DtoClass.name} {\n}`,
+        );
+        const dto =
+          DtoClass.prototype.constructor.toString() !==
+          `class ${DtoClass.name} {\n}`
+            ? new DtoClass(req[target])
+            : req[target];
+        const instance = plainToInstance(DtoClass, dto);
+        await validateOrReject(instance, { whitelist: true });
+        req[target] = instance;
       }
       next();
     } catch (errors: any) {

@@ -75,8 +75,8 @@ model EventDetail {
   from      DateTime
   to        DateTime
   type      EventType
-  venueId   String
-  venue     Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  venueId   String?
+  venue     Venue?    @relation(fields: [venueId], references: [id], onDelete: Cascade)
   eventId   String
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   about     String
