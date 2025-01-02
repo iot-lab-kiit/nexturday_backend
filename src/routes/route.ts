@@ -9,12 +9,14 @@ import {
 } from '../middlewares';
 import { ParticipantRoute } from './participant';
 import { EventRoute } from './event';
+import {AuthRoute} from "./auth";
 
 export class Routes {
   private homeRoute: HomeRoute;
   private firebaseMiddleware: FirebaseMiddleware;
   private combinedAuthMiddleware: CombinedAuthMiddleware;
   private participantRoute: ParticipantRoute;
+  private authRoute: AuthRoute;
   private eventRoute: EventRoute;
 
   constructor(private app: Application) {
@@ -22,6 +24,7 @@ export class Routes {
     this.firebaseMiddleware = new FirebaseMiddleware();
     this.combinedAuthMiddleware = new CombinedAuthMiddleware();
     this.participantRoute = new ParticipantRoute();
+    this.authRoute = new AuthRoute();
     this.eventRoute = new EventRoute();
 
     this.app.use('/api', this.homeRoute.router);
@@ -35,6 +38,7 @@ export class Routes {
       this.combinedAuthMiddleware.verify,
       this.eventRoute.router,
     );
+    this.app.use('/api/auth', this.authRoute.router);
     this.app.use(NotFoundMiddleware.handle);
     this.app.use(PrismaErrorMiddleware.handle);
     this.app.use(GlobalErrorMiddleware.handle);

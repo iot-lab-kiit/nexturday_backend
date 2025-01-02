@@ -1,4 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PropertiesComponent">{}</component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/common/dtos/login/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dtos/login/login.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dtos/login/signup.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/controllers/login/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/controllers/login/login.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/auth/auth.route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/auth/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/login/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/login/login.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/login/signup.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "MrF1yn"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/iot-lab-kiit/nexturday_backend.git",
+    "accountId": "2284c233-b0e0-48e3-b016-101b27136497"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2qytISQUGJGL2K2QdMNpGFAdRSw" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/dibyajyotidey/WebstormProjects/nexturday_backend/src/routes",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/home/dibyajyotidey/WebstormProjects/nexturday_backend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/routes" />
+      <recent name="$PROJECT_DIR$/src/controllers/login" />
+      <recent name="$PROJECT_DIR$/src/services/login" />
+      <recent name="$PROJECT_DIR$/src/common/dtos/login" />
+      <recent name="$PROJECT_DIR$/src/services" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17890.13" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="" />
+      <created>1735646566845</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1735646566845</updated>
+      <workItem from="1735646569449" duration="6000" />
+      <workItem from="1735842262917" duration="3331000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
 </project>
