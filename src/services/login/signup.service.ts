@@ -1,6 +1,6 @@
-import {Prisma, PrismaClient} from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { CustomError } from '../../utils';
-import {loginDto, signupDto} from '../../common/dtos/login';
+import { loginDto, signupDto } from '../../common/dtos/login';
 import { IResponse } from '../../interfaces';
 import bcrypt from 'bcrypt';
 
@@ -11,8 +11,9 @@ export class SignupService {
     this.prisma = new PrismaClient();
   }
 
-  async societySignup(dto: signupDto): Promise<IResponse<Prisma.SocietyGetPayload<{}>>> {
-
+  async societySignup(
+    dto: signupDto,
+  ): Promise<IResponse<Prisma.SocietyGetPayload<{}>>> {
     const { email, password, name, phoneNumber, websiteUrl } = dto;
 
     const society = await this.prisma.society.findFirst({
@@ -21,7 +22,7 @@ export class SignupService {
       },
     });
     if (society) {
-      throw new CustomError("email already associated with a society.", 400);
+      throw new CustomError('email already associated with a society.', 400);
     }
 
     const hashedPassword = await this.hashPassword(password);
@@ -33,7 +34,7 @@ export class SignupService {
         password: hashedPassword,
         name,
         phoneNumber,
-        websiteUrl
+        websiteUrl,
       },
     });
 

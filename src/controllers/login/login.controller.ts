@@ -4,8 +4,8 @@ import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
 import { CreateParticipantDto, UpdateParticipantDto } from '../../common/dtos';
 import { IFirebaseUser } from '../../interfaces/express/user.interface';
-import {LoginService, SignupService} from "../../services/login";
-import {loginDto, signupDto} from "../../common/dtos/login";
+import { LoginService, SignupService } from '../../services/login';
+import { loginDto, signupDto } from '../../common/dtos/login';
 
 export class LoginController {
   private loginService: LoginService;
@@ -16,14 +16,10 @@ export class LoginController {
     this.loginService = new LoginService();
   }
 
-  async login(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const dto = plainToInstance(loginDto, {
-        ...req.body
+        ...req.body,
       });
       const result = await this.loginService.checkLogin(dto);
       res.status(201).json(result);
@@ -32,14 +28,10 @@ export class LoginController {
     }
   }
 
-  async signup(
-      req: Request,
-      res: Response,
-      next: NextFunction,
-  ): Promise<void> {
+  async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const dto = plainToInstance(signupDto, {
-        ...req.body
+        ...req.body,
       });
       const result = await this.signupService.societySignup(dto);
       res.status(201).json(result);

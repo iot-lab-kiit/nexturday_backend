@@ -9,7 +9,7 @@ import {
 } from '../middlewares';
 import { ParticipantRoute } from './participant';
 import { EventRoute } from './event';
-import {AuthRoute} from "./auth";
+import { AuthRoute } from './auth';
 
 export class Routes {
   private homeRoute: HomeRoute;

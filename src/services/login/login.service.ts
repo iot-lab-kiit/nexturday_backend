@@ -1,4 +1,4 @@
-import {Prisma, PrismaClient} from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { CustomError } from '../../utils';
 import { loginDto } from '../../common/dtos/login';
 import { IResponse } from '../../interfaces';
@@ -11,7 +11,9 @@ export class LoginService {
     this.prisma = new PrismaClient();
   }
 
-  async checkLogin(dto: loginDto): Promise<IResponse<Prisma.SocietyGetPayload<{}>>> {
+  async checkLogin(
+    dto: loginDto,
+  ): Promise<IResponse<Prisma.SocietyGetPayload<{}>>> {
     const { email, password } = dto;
 
     const society = await this.prisma.society.findFirst({
@@ -25,7 +27,7 @@ export class LoginService {
 
     const isPasswordValid = await bcrypt.compare(password, society.password);
     if (!isPasswordValid) {
-      throw new CustomError("Invalid password", 400);
+      throw new CustomError('Invalid password', 400);
     }
 
     return {
