@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsString,
   Matches,
+  Max,
   MaxLength,
   Min,
   MinLength,
@@ -35,6 +36,7 @@ export class CreateParticipantDto {
 
   @IsNotEmpty()
   @IsInt()
-  @Min(0)
+  @Min(1)
+  @Max(4)
   studyYear: number;
 }
