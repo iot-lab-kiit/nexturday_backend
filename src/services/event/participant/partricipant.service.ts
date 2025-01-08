@@ -30,6 +30,17 @@ export class ParticipantService {
       },
     });
 
+    await this.prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        participationCount: {
+          increment: 1,
+        },
+      },
+    });
+
     return {
       success: true,
       message: 'event joined successfully',
