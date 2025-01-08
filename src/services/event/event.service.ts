@@ -6,7 +6,7 @@ import {
   IResponse,
 } from '../../interfaces';
 import { TAKE_PAGES } from '../../common/constants';
-import { SearchDto } from '../../common/dtos';
+import { CreateEventDto, SearchDto } from '../../common/dtos';
 
 export class EventService {
   private prisma: PrismaClient;
@@ -96,6 +96,74 @@ export class EventService {
       success: true,
       message: 'events fetched successfully',
       data: event,
+    };
+  }
+
+  async createEvent(dto: CreateEventDto): Promise<IResponse> {
+    const {
+      emails,
+      from,
+      guidlines,
+      name,
+      paid,
+      phoneNumbers,
+      price,
+      societyId,
+      to,
+      registrationUrl,
+      websiteUrl,
+      about,
+      details,
+    } = dto;
+
+    await this.prisma.event.create({
+      data: {
+        about,
+        from,
+        name,
+        paid,
+        to,
+        emails,
+        guidlines,
+        websiteUrl,
+        societyId,
+        phoneNumbers,
+        price,
+        registrationUrl,
+        details: {
+          create: details.map((detail) => ({
+            name: detail.name,
+            about: detail.about,
+            from: detail.from,
+            to: detail.to,
+            type: detail.type,
+            venue: {
+              create: {
+                mapUrl: detail.venue?.mapUrl,
+                name: detail.venue?.name,
+              },
+            },
+          })),
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: 'event created successfully',
+    };
+  }
+
+  async deleteEvent(eventId: string): Promise<IResponse> {
+    await this.prisma.event.delete({
+      where: {
+        id: eventId,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'event deleted successfully',
     };
   }
 }

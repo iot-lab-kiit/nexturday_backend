@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { EventService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
-import { SearchDto } from '../../common/dtos';
+import { CreateEventDto, SearchDto } from '../../common/dtos';
+import { IJwtUser } from '../../interfaces/express/user.interface';
 
 export class EventController {
   private eventService: EventService;
@@ -26,6 +27,38 @@ export class EventController {
     try {
       const result = await this.eventService.getEventById(req.params.id);
       res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createEvent(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const societyId = (req.user as IJwtUser).sub;
+      const dto = plainToInstance(CreateEventDto, {
+        societyId,
+        ...(req.body as Object),
+      });
+      const result = await this.eventService.createEvent(dto);
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteEvents(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const eventId = req.params.id;
+      const result = await this.eventService.deleteEvent(eventId);
+      res.status(201).json(result);
     } catch (error) {
       next(error);
     }
