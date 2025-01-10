@@ -22,7 +22,9 @@ export class CombinedAuthMiddleware {
         this.jwtMiddleware.verify(req, res, next);
         return;
       } catch (jwtError) {
-        return res.status(401).json({ message: 'Unauthorized Exception' });
+        return res
+          .status(401)
+          .json({ success: false, message: 'Unauthorized Exception' });
       }
     }
   }
