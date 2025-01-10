@@ -16,9 +16,7 @@ class SocietyRoute {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.post('/', new middlewares_1.ValidationMiddleware([dtos_1.CreateEventDto, 'body']).validate, this.societyController.createEvent);
         this.router.get('/', new middlewares_1.ValidationMiddleware([dtos_1.SearchDto, 'query']).validate, this.societyController.myEvents);
-        this.router.delete('/:id', this.eventAuthMiddleware.verify, this.societyController.deleteEvents);
         this.router.get('/:id/participants', this.eventAuthMiddleware.verify, new middlewares_1.ValidationMiddleware([dtos_1.SearchDto, 'query']).validate, this.societyController.getAllParticipants);
     }
 }

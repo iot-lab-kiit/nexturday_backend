@@ -36,6 +36,16 @@ class ParticipantService {
                     participantId: uid,
                 },
             });
+            yield this.prisma.event.update({
+                where: {
+                    id: eventId,
+                },
+                data: {
+                    participationCount: {
+                        increment: 1,
+                    },
+                },
+            });
             return {
                 success: true,
                 message: 'event joined successfully',

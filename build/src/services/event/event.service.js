@@ -97,5 +97,61 @@ class EventService {
             };
         });
     }
+    createEvent(dto) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { emails, from, guidlines, name, paid, phoneNumbers, price, societyId, to, registrationUrl, websiteUrl, about, details, } = dto;
+            yield this.prisma.event.create({
+                data: {
+                    about,
+                    from,
+                    name,
+                    paid,
+                    to,
+                    emails,
+                    guidlines,
+                    websiteUrl,
+                    societyId,
+                    phoneNumbers,
+                    price,
+                    registrationUrl,
+                    details: {
+                        create: details.map((detail) => {
+                            var _a, _b;
+                            return ({
+                                name: detail.name,
+                                about: detail.about,
+                                from: detail.from,
+                                to: detail.to,
+                                type: detail.type,
+                                venue: {
+                                    create: {
+                                        mapUrl: (_a = detail.venue) === null || _a === void 0 ? void 0 : _a.mapUrl,
+                                        name: (_b = detail.venue) === null || _b === void 0 ? void 0 : _b.name,
+                                    },
+                                },
+                            });
+                        }),
+                    },
+                },
+            });
+            return {
+                success: true,
+                message: 'event created successfully',
+            };
+        });
+    }
+    deleteEvent(eventId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.prisma.event.delete({
+                where: {
+                    id: eventId,
+                },
+            });
+            return {
+                success: true,
+                message: 'event deleted successfully',
+            };
+        });
+    }
 }
 exports.EventService = EventService;

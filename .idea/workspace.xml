@@ -5,19 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/common/dtos/login/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/common/dtos/login/login.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/common/dtos/login/signup.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/controllers/login/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/controllers/login/login.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/auth/auth.route.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/auth/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/login/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/login/login.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/login/signup.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/common/dtos/participant/createParticipant.dto.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/common/dtos/participant/createParticipant.dto.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/controllers/event/event.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/controllers/event/event.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/controllers/event/society/society.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/controllers/event/society/society.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/routes/event/event.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/event/event.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/routes/event/participant/participant.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/event/participant/participant.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/routes/event/society/society.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/event/society/society.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/routes/route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/services/event/event.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/services/event/event.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/services/event/participant/partricipant.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/services/event/participant/partricipant.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/src/services/event/society/society.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/services/event/society/society.service.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,18 +34,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "MrF1yn"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MrF1yn&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/iot-lab-kiit/nexturday_backend.git",
-    "accountId": "2284c233-b0e0-48e3-b016-101b27136497"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/iot-lab-kiit/nexturday_backend.git&quot;,
+    &quot;accountId&quot;: &quot;2284c233-b0e0-48e3-b016-101b27136497&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
@@ -55,20 +55,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/dibyajyotidey/WebstormProjects/nexturday_backend/src/routes",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/home/dibyajyotidey/WebstormProjects/nexturday_backend/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/dibyajyotidey/WebstormProjects/nexturday_backend/src/routes&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/dibyajyotidey/WebstormProjects/nexturday_backend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/routes" />
@@ -94,7 +94,11 @@
       <option name="presentableId" value="Default" />
       <updated>1735646566845</updated>
       <workItem from="1735646569449" duration="6000" />
-      <workItem from="1735842262917" duration="3331000" />
+      <workItem from="1735842262917" duration="3700000" />
+      <workItem from="1736059713535" duration="54000" />
+      <workItem from="1736180784707" duration="6000" />
+      <workItem from="1736270064161" duration="12000" />
+      <workItem from="1736517167283" duration="733000" />
     </task>
     <servers />
   </component>

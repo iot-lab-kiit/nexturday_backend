@@ -16,7 +16,7 @@ class ParticipantRoute {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.use(this.favoriteRoute.router);
+        this.router.use('favorite', this.favoriteRoute.router);
         this.router.post('/:id', this.participantController.joinEvent);
         this.router.get('/', new middlewares_1.ValidationMiddleware([dtos_1.SearchDto, 'query']).validate, this.participantController.getAllJoinedEvents);
     }

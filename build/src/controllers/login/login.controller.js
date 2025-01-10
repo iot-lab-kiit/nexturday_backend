@@ -9,22 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SocietyController = void 0;
-const society_1 = require("../../../services/event/society");
-const utils_1 = require("../../../utils");
+exports.LoginController = void 0;
+const utils_1 = require("../../utils");
 const class_transformer_1 = require("class-transformer");
-const dtos_1 = require("../../../common/dtos");
-class SocietyController {
+const login_1 = require("../../services/login");
+const login_2 = require("../../common/dtos/login");
+class LoginController {
     constructor() {
         utils_1.MethodBinder.bind(this);
-        this.societyService = new society_1.SocietyService();
+        this.loginService = new login_1.LoginService();
     }
-    myEvents(req, res, next) {
+    login(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const societyId = req.user.sub;
-                const dto = (0, class_transformer_1.plainToInstance)(dtos_1.SearchDto, req.query);
-                const result = yield this.societyService.myEvents(societyId, dto);
+                const dto = (0, class_transformer_1.plainToInstance)(login_2.loginDto, Object.assign({}, req.body));
+                const result = yield this.loginService.checkLogin(dto);
                 res.status(201).json(result);
             }
             catch (error) {
@@ -32,12 +31,11 @@ class SocietyController {
             }
         });
     }
-    getAllParticipants(req, res, next) {
+    signup(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const eventId = req.params.id;
-                const dto = (0, class_transformer_1.plainToInstance)(dtos_1.SearchDto, req.query);
-                const result = yield this.societyService.getAllParticipants(eventId, dto);
+                const dto = (0, class_transformer_1.plainToInstance)(login_2.signupDto, Object.assign({}, req.body));
+                const result = yield this.signupService.societySignup(dto);
                 res.status(201).json(result);
             }
             catch (error) {
@@ -46,4 +44,4 @@ class SocietyController {
         });
     }
 }
-exports.SocietyController = SocietyController;
+exports.LoginController = LoginController;
