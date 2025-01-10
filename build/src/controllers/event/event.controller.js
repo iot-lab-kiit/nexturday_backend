@@ -42,5 +42,30 @@ class EventController {
             }
         });
     }
+    createEvent(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const societyId = req.user.sub;
+                const dto = (0, class_transformer_1.plainToInstance)(dtos_1.CreateEventDto, Object.assign({ societyId }, req.body));
+                const result = yield this.eventService.createEvent(dto);
+                res.status(201).json(result);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    deleteEvents(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const eventId = req.params.id;
+                const result = yield this.eventService.deleteEvent(eventId);
+                res.status(201).json(result);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
 }
 exports.EventController = EventController;
