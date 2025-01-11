@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { ParticipantService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
-import { CreateParticipantDto, UpdateParticipantDto } from '../../common/dtos';
-import { IFirebaseUser } from '../../interfaces/express/user.interface';
+import { IUser } from '../../interfaces/express/user.interface';
+import { UpdateParticipantDetailDto } from '../../common/dtos';
 
 export class ParticipantController {
   private participantService: ParticipantService;
@@ -13,25 +13,6 @@ export class ParticipantController {
     this.participantService = new ParticipantService();
   }
 
-  async createParticipant(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const rollNo = req.user?.email?.replace('@kiit.ac.in', '');
-      const dto = plainToInstance(CreateParticipantDto, {
-        ...req.body,
-        ...req.user,
-        rollNo,
-      });
-      const result = await this.participantService.createParticipant(dto);
-      res.status(201).json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   async getProfile(
     req: Request,
     res: Response,
@@ -39,7 +20,7 @@ export class ParticipantController {
   ): Promise<void> {
     try {
       const result = await this.participantService.getProfile(
-        (req.user as IFirebaseUser).uid,
+        (req.user as IUser).sub,
       );
       res.status(200).json(result);
     } catch (error) {
@@ -52,9 +33,9 @@ export class ParticipantController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const dto = plainToInstance(UpdateParticipantDto, req.body);
+      const dto = plainToInstance(UpdateParticipantDetailDto, req.body);
       const result = await this.participantService.updateProfile(
-        (req.user as IFirebaseUser).uid,
+        (req.user as IUser).sub,
         dto,
       );
       res.status(200).json(result);

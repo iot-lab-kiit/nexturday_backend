@@ -29,7 +29,6 @@ export class SignupService {
 
     const newSociety = await this.prisma.society.create({
       data: {
-        uid: Math.random().toString(36).substring(2),
         email,
         password: hashedPassword,
         name,

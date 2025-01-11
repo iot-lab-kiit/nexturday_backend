@@ -3,7 +3,7 @@ import { EventService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
 import { CreateEventDto, SearchDto } from '../../common/dtos';
-import { IJwtUser } from '../../interfaces/express/user.interface';
+import { IUser } from '../../interfaces/express/user.interface';
 
 export class EventController {
   private eventService: EventService;
@@ -38,7 +38,7 @@ export class EventController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const societyId = (req.user as IJwtUser).sub;
+      const societyId = (req.user as IUser).sub;
       const dto = plainToInstance(CreateEventDto, {
         societyId,
         ...(req.body as Object),

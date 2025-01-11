@@ -11,7 +11,15 @@ export class ParticipantService {
     this.prisma = new PrismaClient();
   }
 
-  async joinEvent(uid: string, eventId: string): Promise<IResponse> {
+  async joinEvent(participantId: string, eventId: string): Promise<IResponse> {
+    const participantDetail = await this.prisma.participantDetail.findUnique({
+      where: {
+        participantId,
+      },
+    });
+    if (!participantDetail) {
+      throw new CustomError('participant details not found', 404);
+    }
     const event = await this.prisma.event.findUnique({
       where: {
         id: eventId,
@@ -26,7 +34,7 @@ export class ParticipantService {
     await this.prisma.eventParticipant.create({
       data: {
         eventId,
-        participantId: uid,
+        participantId,
       },
     });
 
@@ -48,12 +56,12 @@ export class ParticipantService {
   }
 
   async getAllJoinedEvents(
-    uid: string,
+    participantId: string,
     dto: SearchDto,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
     const totalJoinedEvents = await this.prisma.eventParticipant.count({
       where: {
-        participantId: uid,
+        participantId,
       },
     });
     const totalPages = Math.ceil(totalJoinedEvents / TAKE_PAGES);
@@ -76,7 +84,7 @@ export class ParticipantService {
       where: {
         participants: {
           some: {
-            participantId: uid,
+            participantId,
           },
         },
         ...(dto.q

@@ -1,6 +1,6 @@
 import {
   IsInt,
-  IsOptional,
+  IsNotEmpty,
   IsString,
   Matches,
   MaxLength,
@@ -8,26 +8,30 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class UpdateParticipantDto {
-  @IsOptional()
+export class UpdateParticipantDetailDto {
+  @IsNotEmpty()
   @IsString()
   branch: string;
 
-  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
   @IsString()
   @Matches(/^\d+$/)
   @MinLength(10)
   @MaxLength(10)
   phoneNumber: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Matches(/^\d+$/)
   @MinLength(10)
   @MaxLength(10)
   whatsappNumber: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsInt()
   @Min(0)
   studyYear: number;

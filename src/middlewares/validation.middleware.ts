@@ -20,10 +20,6 @@ export class ValidationMiddleware {
   async validate(req: Request, res: Response, next: NextFunction) {
     try {
       for (const [DtoClass, target] of this.validations) {
-        console.log(
-          DtoClass.prototype.constructor.toString() !==
-            `class ${DtoClass.name} {\n}`,
-        );
         const dto =
           DtoClass.prototype.constructor.toString() !==
           `class ${DtoClass.name} {\n}`

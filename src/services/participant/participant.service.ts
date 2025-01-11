@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { IParticipant, IResponse } from '../../interfaces';
-import { CreateParticipantDto, UpdateParticipantDto } from '../../common/dtos';
+import {
+  CreateParticipantDto,
+  UpdateParticipantDetailDto,
+} from '../../common/dtos';
 import { CustomError } from '../../utils';
 
 export class ParticipantService {
@@ -10,54 +13,34 @@ export class ParticipantService {
     this.prisma = new PrismaClient();
   }
 
-  async createParticipant(
-    dto: CreateParticipantDto,
-  ): Promise<IResponse<IParticipant>> {
-    const {
-      branch,
-      email,
-      name,
-      phoneNumber,
-      rollNo,
-      studyYear,
-      uid,
-      whatsappNumber,
-      imageUrl,
-    } = dto;
+  async createParticipant(dto: CreateParticipantDto): Promise<void> {
+    const { email, rollNo, uid, imageUrl } = dto;
 
     const society = await this.prisma.society.findUnique({
       where: {
-        uid,
+        email,
       },
     });
     if (society) {
       throw new CustomError('email already registered as society', 400);
     }
-    const participant = await this.prisma.participant.create({
+    await this.prisma.participant.create({
       data: {
-        branch,
         email,
-        name,
-        phoneNumber,
         rollNo,
-        studyYear,
-        uid,
-        whatsappNumber,
         imageUrl,
+        uid,
       },
     });
-
-    return {
-      success: true,
-      message: 'participant created successfully',
-      data: participant,
-    };
   }
 
   async getProfile(uid: string): Promise<IResponse<IParticipant>> {
     const participant = await this.prisma.participant.findUnique({
       where: {
         uid,
+      },
+      include: {
+        detail: true,
       },
     });
 
@@ -69,25 +52,38 @@ export class ParticipantService {
   }
 
   async updateProfile(
-    uid: string,
-    dto: UpdateParticipantDto,
+    participantId: string,
+    dto: UpdateParticipantDetailDto,
   ): Promise<IResponse> {
-    const { branch, phoneNumber, studyYear, whatsappNumber } = dto;
-    await this.prisma.participant.update({
+    const { branch, phoneNumber, studyYear, whatsappNumber, name } = dto;
+    await this.prisma.participantDetail.upsert({
       where: {
-        uid,
+        participantId,
       },
-      data: {
+      create: {
         branch,
         phoneNumber,
         whatsappNumber,
         studyYear,
+        name,
+        participant: {
+          connect: {
+            id: participantId,
+          },
+        },
+      },
+      update: {
+        branch,
+        phoneNumber,
+        whatsappNumber,
+        studyYear,
+        name,
       },
     });
 
     return {
       success: true,
-      message: 'participant updated successfully',
+      message: 'participant detail updated successfully',
     };
   }
 }

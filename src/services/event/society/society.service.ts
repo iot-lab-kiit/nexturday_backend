@@ -5,7 +5,7 @@ import {
   IPaginatedData,
   IResponse,
 } from '../../../interfaces';
-import { CreateEventDto, SearchDto } from '../../../common/dtos';
+import { SearchDto } from '../../../common/dtos';
 import { TAKE_PAGES } from '../../../common/constants';
 
 export class SocietyService {
@@ -95,9 +95,16 @@ export class SocietyService {
             {
               participant: {
                 _relevance: {
-                  fields: ['name', 'email', 'rollNo'],
+                  fields: ['email', 'rollNo'],
                   search: dto.q,
                   sort: 'desc',
+                },
+                detail: {
+                  _relevance: {
+                    fields: ['name'],
+                    search: dto.q,
+                    sort: 'desc',
+                  },
                 },
               },
             },
@@ -109,7 +116,7 @@ export class SocietyService {
         participant: dto.q
           ? {
               OR: [
-                { name: { search: dto.q } },
+                { detail: { name: { search: dto.q } } },
                 { email: { search: dto.q } },
                 { rollNo: { search: dto.q } },
               ],
@@ -117,7 +124,11 @@ export class SocietyService {
           : undefined,
       },
       include: {
-        participant: true,
+        participant: {
+          include: {
+            detail: true,
+          },
+        },
       },
     });
 

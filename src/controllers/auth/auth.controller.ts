@@ -1,13 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { ParticipantService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
-import { CreateParticipantDto, UpdateParticipantDto } from '../../common/dtos';
-import { IFirebaseUser } from '../../interfaces/express/user.interface';
-import { LoginService, SignupService } from '../../services/login';
+import { LoginService, SignupService } from '../../services/auth';
 import { loginDto, signupDto } from '../../common/dtos/login';
 
-export class LoginController {
+export class AuthController {
   private loginService: LoginService;
   private signupService: SignupService;
 

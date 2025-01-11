@@ -1,15 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, verify } from 'jsonwebtoken';
-import { IJwtUser } from '../../interfaces/express/user.interface';
+import { IUser } from '../../interfaces/express/user.interface';
 import { CustomError, MethodBinder } from '../../utils';
 import 'dotenv/config';
+import { PrismaClient } from '@prisma/client';
 
 export class JWTMiddleware {
+  private prisma: PrismaClient;
   constructor() {
     MethodBinder.bind(this);
+    this.prisma = new PrismaClient();
   }
 
-  verify(req: Request, res: Response, next: NextFunction) {
+  async verify(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
     try {
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -17,7 +20,17 @@ export class JWTMiddleware {
       }
       const token = req.headers.authorization?.split(' ')[1] as string;
 
-      const user = verify(token, process.env.JWT_SECRET as string) as IJwtUser;
+      const user = verify(token, process.env.JWT_SECRET as string) as IUser;
+
+      const society = await this.prisma.society.findUnique({
+        where: {
+          email: user.email,
+        },
+      });
+
+      if (!society) {
+        throw new CustomError('society not found', 404);
+      }
 
       req.user = {
         email: user.email,
@@ -25,7 +38,7 @@ export class JWTMiddleware {
         sub: user.sub,
         role: 'SOCIETY',
         image: user?.image,
-      } as IJwtUser;
+      };
       next();
     } catch (error) {
       if (error instanceof JsonWebTokenError) {

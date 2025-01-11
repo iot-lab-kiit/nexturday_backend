@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { MethodBinder } from '../../../utils';
-import { IFirebaseUser } from '../../../interfaces/express/user.interface';
+import { IUser } from '../../../interfaces/express/user.interface';
 import { FavoriteService } from '../../../services/event/participant';
 import { plainToInstance } from 'class-transformer';
 import { SearchDto } from '../../../common/dtos';
@@ -19,9 +19,12 @@ export class FavoriteController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const uid = (req.user as IFirebaseUser).uid;
+      const participantId = (req.user as IUser).sub;
       const eventId = req.params.id;
-      const result = await this.favoriteService.favoriteEvent(uid, eventId);
+      const result = await this.favoriteService.favoriteEvent(
+        participantId,
+        eventId,
+      );
       res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -34,9 +37,12 @@ export class FavoriteController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const uid = (req.user as IFirebaseUser).uid;
+      const participantId = (req.user as IUser).sub;
       const eventId = req.params.id;
-      const result = await this.favoriteService.unfavoriteEvent(uid, eventId);
+      const result = await this.favoriteService.unfavoriteEvent(
+        participantId,
+        eventId,
+      );
       res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -49,9 +55,12 @@ export class FavoriteController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const uid = (req.user as IFirebaseUser).uid;
+      const participantId = (req.user as IUser).sub;
       const dto = plainToInstance(SearchDto, req.query);
-      const result = await this.favoriteService.getAllFavoriteEvents(uid, dto);
+      const result = await this.favoriteService.getAllFavoriteEvents(
+        participantId,
+        dto,
+      );
       res.status(201).json(result);
     } catch (error) {
       next(error);

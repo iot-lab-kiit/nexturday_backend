@@ -1,2 +1,2 @@
 export * from './createParticipant.dto';
-export * from './updateParticipant.dto';
+export * from './updateParticipantDetail.dto';

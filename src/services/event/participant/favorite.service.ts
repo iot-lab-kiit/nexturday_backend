@@ -10,11 +10,14 @@ export class FavoriteService {
     this.prisma = new PrismaClient();
   }
 
-  async favoriteEvent(uid: string, eventId: string): Promise<IResponse> {
+  async favoriteEvent(
+    participantId: string,
+    eventId: string,
+  ): Promise<IResponse> {
     await this.prisma.favoriteEvent.create({
       data: {
         eventId,
-        participantId: uid,
+        participantId,
       },
     });
 
@@ -24,12 +27,15 @@ export class FavoriteService {
     };
   }
 
-  async unfavoriteEvent(uid: string, eventId: string): Promise<IResponse> {
+  async unfavoriteEvent(
+    participantId: string,
+    eventId: string,
+  ): Promise<IResponse> {
     await this.prisma.favoriteEvent.delete({
       where: {
         participantId_eventId: {
           eventId,
-          participantId: uid,
+          participantId,
         },
       },
     });
@@ -41,12 +47,12 @@ export class FavoriteService {
   }
 
   async getAllFavoriteEvents(
-    uid: string,
+    participantId: string,
     dto: SearchDto,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
     const totalFavoriteEvents = await this.prisma.eventParticipant.count({
       where: {
-        participantId: uid,
+        participantId,
       },
     });
     const totalPages = Math.ceil(totalFavoriteEvents / TAKE_PAGES);
@@ -69,7 +75,7 @@ export class FavoriteService {
       where: {
         favoriteBy: {
           some: {
-            participantId: uid,
+            participantId,
           },
         },
         ...(dto.q

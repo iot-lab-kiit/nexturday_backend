@@ -2,14 +2,16 @@ import { FirebaseAuthError, getAuth } from 'firebase-admin/auth';
 import { CustomError, MethodBinder } from '../../utils';
 import { FirebaseProvider } from '../../libs/firebase';
 import { NextFunction, Request, Response } from 'express';
-import { IFirebaseUser } from '../../interfaces/express/user.interface';
+import { PrismaClient } from '@prisma/client';
 
 export class FirebaseMiddleware {
   private firebaseProvider: typeof FirebaseProvider;
+  private prisma: PrismaClient;
 
   constructor() {
     MethodBinder.bind(this);
     this.firebaseProvider = FirebaseProvider;
+    this.prisma = new PrismaClient();
   }
 
   async verify(req: Request, res: Response, next: NextFunction) {
@@ -28,13 +30,23 @@ export class FirebaseMiddleware {
         throw new CustomError('kiit email allowed', 401);
       }
 
+      const participant = await this.prisma.participant.findUnique({
+        where: {
+          email: user.email,
+        },
+      });
+
+      if (!participant) {
+        throw new CustomError('participant not found', 404);
+      }
+
       req.user = {
         email: user.email,
         name: user.name,
-        uid: user.uid,
+        sub: participant?.id,
         role: 'PARTICIPANT',
         image: user?.picture,
-      } as IFirebaseUser;
+      };
       next();
     } catch (error) {
       if (error instanceof FirebaseAuthError) {
