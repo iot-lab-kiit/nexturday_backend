@@ -14,12 +14,12 @@ export class FirebaseMiddleware {
 
   async verify(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new CustomError('Authorization token is required', 401);
-    }
-
-    const token = req.headers.authorization?.split(' ')[1] as string;
     try {
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        throw new CustomError('Authorization token is required', 401);
+      }
+      const token = req.headers.authorization?.split(' ')[1] as string;
+
       const user = await getAuth(this.firebaseProvider.firebase).verifyIdToken(
         token,
       );
@@ -43,10 +43,7 @@ export class FirebaseMiddleware {
           message: 'Token validation failed',
         });
       }
-      res.status(500).json({
-        success: false,
-        message: 'internal server error',
-      });
+      next(error);
     }
   }
 }
