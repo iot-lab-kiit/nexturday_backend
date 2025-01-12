@@ -34,18 +34,16 @@ export class S3BucketService {
     return await Promise.all(files.map((file) => this.uploadSingle(file)));
   }
 
-  async deleteSingle(imageData: IImageData): Promise<void> {
+  async deleteSingle(key: string): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
-      Key: imageData.key,
+      Key: key,
     });
 
     await this.s3BucketProvider.s3.send(command);
   }
 
-  async deleteMultiple(imagesData: IImageData[]): Promise<void> {
-    await Promise.all(
-      imagesData.map((imageData) => this.deleteSingle(imageData)),
-    );
+  async deleteMultiple(keys: string[]): Promise<void> {
+    await Promise.all(keys.map((key) => this.deleteSingle(key)));
   }
 }

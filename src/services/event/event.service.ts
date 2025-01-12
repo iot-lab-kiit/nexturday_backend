@@ -3,11 +3,12 @@ import {
   IAllEvents,
   IEvent,
   IEventById,
+  IImageData,
   IPaginatedData,
   IResponse,
 } from '../../interfaces';
-import { TAKE_PAGES } from '../../common/constants';
-import { CreateEventDto, SearchDto } from '../../common/dtos';
+import { TAKE_PAGES, TOTAL_IMAGES } from '../../common/constants';
+import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
 import { UploaderService } from '../uploader';
 import { CustomError } from '../../utils';
 
@@ -102,7 +103,7 @@ export class EventService {
   }
 
   async createEvent(
-    dto: CreateEventDto,
+    dto: EventDto,
     images?: Express.Multer.File[],
   ): Promise<IResponse> {
     const {
@@ -135,7 +136,7 @@ export class EventService {
         emails,
         guidlines,
         websiteUrl,
-        societyId,
+        societyId: societyId as string,
         phoneNumbers,
         price,
         registrationUrl,
@@ -169,6 +170,111 @@ export class EventService {
     };
   }
 
+  async updateEvent(
+    dto: UpdateEventDto,
+    images?: Express.Multer.File[],
+  ): Promise<IResponse> {
+    const {
+      emails,
+      from,
+      guidlines,
+      name,
+      paid,
+      phoneNumbers,
+      price,
+      to,
+      registrationUrl,
+      websiteUrl,
+      about,
+      details,
+      imagesKeys,
+      eventId,
+    } = dto;
+    const event = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      include: {
+        _count: {
+          select: {
+            images: true,
+          },
+        },
+      },
+    });
+    let totalImages = event?._count.images as number;
+    if (images && images.length !== 0) {
+      totalImages += images.length;
+    }
+    if (imagesKeys) {
+      totalImages -= imagesKeys.length;
+    }
+    if (totalImages > TOTAL_IMAGES) {
+      throw new CustomError('images limit reached', 400);
+    }
+
+    if (imagesKeys && imagesKeys.length > 0) {
+      await this.uploaderService.deleteMultiple(imagesKeys);
+    }
+    let imagesData: IImageData[] = [];
+    if (images && images.length !== 0) {
+      imagesData = await this.uploaderService.uploadMultiple(images);
+    }
+
+    await this.prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        about,
+        from,
+        name,
+        paid,
+        to,
+        emails,
+        guidlines,
+        websiteUrl,
+        phoneNumbers,
+        price,
+        registrationUrl,
+        ...(imagesKeys &&
+          imagesKeys.length > 0 && {
+            images: {
+              create: imagesData.map((imageData) => ({
+                url: imageData.url,
+                key: imageData.key,
+              })),
+            },
+          }),
+        details: {
+          updateMany: {
+            where: {
+              eventId,
+            },
+            data: details.map((detail) => ({
+              name: detail.name,
+              about: detail.about,
+              from: detail.from,
+              to: detail.to,
+              type: detail.type,
+              venue: {
+                create: {
+                  mapUrl: detail.venue?.mapUrl,
+                  name: detail.venue?.name,
+                },
+              },
+            })),
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: 'event updated successfully',
+    };
+  }
+
   async deleteEvent(eventId: string): Promise<IResponse> {
     const event = (await this.prisma.event.findUnique({
       where: {
@@ -178,7 +284,9 @@ export class EventService {
         images: true,
       },
     })) as IEvent<{ include: { images: true } }>;
-    await this.uploaderService.deleteMultiple(event.images);
+    await this.uploaderService.deleteMultiple(
+      event.images.map((image) => image.key),
+    );
 
     await this.prisma.event.delete({
       where: {

@@ -5,10 +5,11 @@ import {
   UploaderMiddleware,
   ValidationMiddleware,
 } from '../../middlewares';
-import { CreateEventDto, SearchDto } from '../../common/dtos';
+import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
 import { ParticipantRoute } from './participant';
 import { SocietyRoute } from './society';
 import { EventAuthMiddleware } from '../../middlewares/auth/event/society';
+import { TOTAL_IMAGES } from '../../common/constants';
 
 export class EventRoute {
   public router: Router;
@@ -45,9 +46,15 @@ export class EventRoute {
     this.router.use('/society', this.societyRoute.router);
     this.router.post(
       '/',
-      this.uploaderMiddleware.uploader.array('images', 5),
-      new ValidationMiddleware([CreateEventDto, 'body']).validate,
+      this.uploaderMiddleware.uploader.array('images', TOTAL_IMAGES),
+      new ValidationMiddleware([EventDto, 'body']).validate,
       this.eventController.createEvent,
+    );
+    this.router.patch(
+      '/:id',
+      this.uploaderMiddleware.uploader.array('images', TOTAL_IMAGES),
+      new ValidationMiddleware([UpdateEventDto, 'body']).validate,
+      this.eventController.updateEvent,
     );
     this.router.delete(
       '/:id',

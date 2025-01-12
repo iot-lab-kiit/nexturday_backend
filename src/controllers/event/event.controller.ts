@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { EventService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
-import { CreateEventDto, SearchDto } from '../../common/dtos';
+import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
 import { IUser } from '../../interfaces/express/user.interface';
 
 export class EventController {
@@ -39,12 +39,31 @@ export class EventController {
   ): Promise<void> {
     try {
       const societyId = (req.user as IUser).sub;
-      const dto = plainToInstance(CreateEventDto, {
+      const dto = plainToInstance(EventDto, {
         societyId,
         ...(req.body as Object),
       });
       const images = req.files as Express.Multer.File[] | undefined;
       const result = await this.eventService.createEvent(dto, images);
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateEvent(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const eventId = req.params.id;
+      const dto = plainToInstance(UpdateEventDto, {
+        eventId,
+        ...(req.body as Object),
+      });
+      const images = req.files as Express.Multer.File[] | undefined;
+      const result = await this.eventService.updateEvent(dto, images);
       res.status(201).json(result);
     } catch (error) {
       next(error);

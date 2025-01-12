@@ -24,11 +24,11 @@ export class UploaderService {
     return await this.s3BucketService.uploadMultiple(filesData);
   }
 
-  async deleteSingle(imageData: IImageData): Promise<void> {
-    return await this.s3BucketService.deleteSingle(imageData);
+  async deleteSingle(key: string): Promise<void> {
+    return await this.s3BucketService.deleteSingle(key);
   }
 
-  async deleteMultiple(imagesData: IImageData[]): Promise<void> {
-    return await this.s3BucketService.deleteMultiple(imagesData);
+  async deleteMultiple(keys: string[]): Promise<void> {
+    return await this.s3BucketService.deleteMultiple(keys);
   }
 }

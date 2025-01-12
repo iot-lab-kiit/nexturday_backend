@@ -15,8 +15,8 @@ import {
 import { EventDetailDto } from './eventdetail.dto';
 import 'reflect-metadata';
 
-export class CreateEventDto {
-  societyId: string;
+export class EventDto {
+  societyId?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -79,7 +79,7 @@ export class CreateEventDto {
   @Type(() => EventDetailDto)
   details: EventDetailDto[];
 
-  constructor(payload?: CreateEventDto) {
+  constructor(payload?: EventDto) {
     if (!payload?.paid) {
       delete payload?.registrationUrl;
       delete payload?.price;
@@ -87,7 +87,7 @@ export class CreateEventDto {
     const details = payload?.details.map(
       (detail) => new EventDetailDto(detail),
     ) as EventDetailDto[];
-    payload = { ...payload, details } as CreateEventDto;
+    payload = { ...payload, details } as EventDto;
     Object.assign(this, payload);
   }
 }
