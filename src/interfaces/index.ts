@@ -3,3 +3,4 @@ export * from './participant';
 export * from './event';
 export * from './nonEmptyArray.type';
 export * from './uploader';
+export * from './society';

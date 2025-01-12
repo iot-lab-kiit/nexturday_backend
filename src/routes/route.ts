@@ -4,12 +4,14 @@ import {
   CombinedAuthMiddleware,
   FirebaseMiddleware,
   GlobalErrorMiddleware,
+  JWTMiddleware,
   NotFoundMiddleware,
   PrismaErrorMiddleware,
 } from '../middlewares';
 import { ParticipantRoute } from './participant';
 import { EventRoute } from './event';
 import { AuthRoute } from './auth';
+import { SocietyRoute } from './society';
 
 export class Routes {
   private homeRoute: HomeRoute;
@@ -18,6 +20,8 @@ export class Routes {
   private participantRoute: ParticipantRoute;
   private authRoute: AuthRoute;
   private eventRoute: EventRoute;
+  private societyRoute: SocietyRoute;
+  private jwtMiddlware: JWTMiddleware;
 
   constructor(private app: Application) {
     this.homeRoute = new HomeRoute();
@@ -26,12 +30,19 @@ export class Routes {
     this.participantRoute = new ParticipantRoute();
     this.authRoute = new AuthRoute();
     this.eventRoute = new EventRoute();
+    this.societyRoute = new SocietyRoute();
+    this.jwtMiddlware = new JWTMiddleware();
 
     this.app.use('/api', this.homeRoute.router);
     this.app.use(
       '/api/participants',
       this.firebaseMiddleware.verify,
       this.participantRoute.router,
+    );
+    this.app.use(
+      '/api/society',
+      this.jwtMiddlware.verify,
+      this.societyRoute.router,
     );
     this.app.use(
       '/api/events',

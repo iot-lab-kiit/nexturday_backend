@@ -27,17 +27,19 @@ export class ParticipantController {
       next(error);
     }
   }
+
   async updateProfile(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const dto = plainToInstance(UpdateParticipantDetailDto, req.body);
-      const result = await this.participantService.updateProfile(
-        (req.user as IUser).sub,
-        dto,
-      );
+      const participantId = (req.user as IUser).sub;
+      const dto = plainToInstance(UpdateParticipantDetailDto, {
+        ...req.body,
+        participantId,
+      });
+      const result = await this.participantService.updateProfile(dto);
       res.status(200).json(result);
     } catch (error) {
       next(error);

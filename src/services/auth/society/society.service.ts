@@ -5,12 +5,15 @@ import { sign } from 'jsonwebtoken';
 import { ILogin, IPayload } from '../../../interfaces/auth/society';
 import { IResponse } from '../../../interfaces';
 import { LoginDto, SignupDto } from '../../../common/dtos/auth/society';
+import { BcryptService } from '../../../common/services';
 
 export class SocietyService {
   private prisma: PrismaClient;
+  private bcryptService: BcryptService;
 
   constructor() {
     this.prisma = new PrismaClient();
+    this.bcryptService = new BcryptService();
   }
 
   async login(dto: LoginDto): Promise<IResponse<ILogin>> {
@@ -63,7 +66,7 @@ export class SocietyService {
       throw new CustomError('email already exists', 400);
     }
 
-    const hashedPassword = await this.hashPassword(password);
+    const hashedPassword = await this.bcryptService.hashPassword(password);
 
     await this.prisma.society.create({
       data: {
@@ -79,11 +82,6 @@ export class SocietyService {
       success: true,
       message: 'SignedUp successfully',
     };
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const saltRounds = 10;
-    return await hash(password, saltRounds);
   }
 
   private jwtToken(payload: IPayload): string {

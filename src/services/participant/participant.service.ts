@@ -51,11 +51,15 @@ export class ParticipantService {
     };
   }
 
-  async updateProfile(
-    participantId: string,
-    dto: UpdateParticipantDetailDto,
-  ): Promise<IResponse> {
-    const { branch, phoneNumber, studyYear, whatsappNumber, name } = dto;
+  async updateProfile(dto: UpdateParticipantDetailDto): Promise<IResponse> {
+    const {
+      branch,
+      phoneNumber,
+      studyYear,
+      whatsappNumber,
+      name,
+      participantId,
+    } = dto;
     await this.prisma.participantDetail.upsert({
       where: {
         participantId,

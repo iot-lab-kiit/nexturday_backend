@@ -9,6 +9,8 @@ import {
 } from 'class-validator';
 
 export class UpdateParticipantDetailDto {
+  participantId: string;
+
   @IsNotEmpty()
   @IsString()
   branch: string;
