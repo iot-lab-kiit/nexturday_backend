@@ -1,6 +1,6 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class signupDto {
+export class SignupDto {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -19,5 +19,5 @@ export class signupDto {
 
   @IsOptional()
   @IsString()
-  websiteUrl: string;
+  websiteUrl?: string;
 }
