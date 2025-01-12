@@ -13,10 +13,6 @@ export interface IEventById
           venue: true;
         };
       };
-      _count: {
-        select: {
-          participants: true;
-        };
-      };
+      images: true;
     };
   }> {}

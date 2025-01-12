@@ -11,6 +11,7 @@ export class AuthController {
   constructor() {
     MethodBinder.bind(this);
     this.loginService = new LoginService();
+    this.signupService = new SignupService();
   }
 
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {

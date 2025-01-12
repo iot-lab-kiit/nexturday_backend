@@ -94,6 +94,7 @@ export class FavoriteService {
             name: true,
           },
         },
+        images: true,
       },
     });
 

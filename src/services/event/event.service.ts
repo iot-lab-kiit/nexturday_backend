@@ -1,18 +1,23 @@
 import { PrismaClient } from '@prisma/client';
 import {
   IAllEvents,
+  IEvent,
   IEventById,
   IPaginatedData,
   IResponse,
 } from '../../interfaces';
 import { TAKE_PAGES } from '../../common/constants';
 import { CreateEventDto, SearchDto } from '../../common/dtos';
+import { UploaderService } from '../uploader';
+import { CustomError } from '../../utils';
 
 export class EventService {
   private prisma: PrismaClient;
+  private uploaderService: UploaderService;
 
   constructor() {
     this.prisma = new PrismaClient();
+    this.uploaderService = new UploaderService();
   }
 
   async getAllEvents(
@@ -52,6 +57,7 @@ export class EventService {
             name: true,
           },
         },
+        images: true,
       },
     });
 
@@ -84,11 +90,7 @@ export class EventService {
             venue: true,
           },
         },
-        _count: {
-          select: {
-            participants: true,
-          },
-        },
+        images: true,
       },
     });
 
@@ -99,7 +101,10 @@ export class EventService {
     };
   }
 
-  async createEvent(dto: CreateEventDto): Promise<IResponse> {
+  async createEvent(
+    dto: CreateEventDto,
+    images?: Express.Multer.File[],
+  ): Promise<IResponse> {
     const {
       emails,
       from,
@@ -115,6 +120,10 @@ export class EventService {
       about,
       details,
     } = dto;
+    if (!images || images.length === 0) {
+      throw new CustomError('images are required', 400);
+    }
+    const imagesData = await this.uploaderService.uploadMultiple(images);
 
     await this.prisma.event.create({
       data: {
@@ -130,6 +139,12 @@ export class EventService {
         phoneNumbers,
         price,
         registrationUrl,
+        images: {
+          create: imagesData.map((imageData) => ({
+            url: imageData.url,
+            key: imageData.key,
+          })),
+        },
         details: {
           create: details.map((detail) => ({
             name: detail.name,
@@ -155,6 +170,16 @@ export class EventService {
   }
 
   async deleteEvent(eventId: string): Promise<IResponse> {
+    const event = (await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      include: {
+        images: true,
+      },
+    })) as IEvent<{ include: { images: true } }>;
+    await this.uploaderService.deleteMultiple(event.images);
+
     await this.prisma.event.delete({
       where: {
         id: eventId,

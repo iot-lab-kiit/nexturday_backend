@@ -56,7 +56,7 @@ model Society {
 model Event {
   id                 String             @id @default(uuid())
   paid               Boolean
-  images             String[]
+  images             Image[]
   name               String
   society            Society            @relation(fields: [societyId], references: [id], onDelete: Cascade)
   societyId          String
@@ -77,6 +77,15 @@ model Event {
   details            EventDetail[]
 }
 
+model Image {
+  url String
+  key String
+  event Event @relation(fields: [eventId],references: [id],onDelete: Cascade)
+  eventId String
+
+  @@id([url, key])
+}
+
 model EventDetail {
   id        String    @id @default(uuid())
   name      String
@@ -88,7 +97,6 @@ model EventDetail {
   eventId   String
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   about     String
-  images    String[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }

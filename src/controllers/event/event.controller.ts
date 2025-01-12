@@ -43,7 +43,8 @@ export class EventController {
         societyId,
         ...(req.body as Object),
       });
-      const result = await this.eventService.createEvent(dto);
+      const images = req.files as Express.Multer.File[] | undefined;
+      const result = await this.eventService.createEvent(dto, images);
       res.status(201).json(result);
     } catch (error) {
       next(error);

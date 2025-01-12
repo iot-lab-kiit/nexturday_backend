@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { EventController } from '../../controllers';
-import { RoleMiddleware, ValidationMiddleware } from '../../middlewares';
+import {
+  RoleMiddleware,
+  UploaderMiddleware,
+  ValidationMiddleware,
+} from '../../middlewares';
 import { CreateEventDto, SearchDto } from '../../common/dtos';
 import { ParticipantRoute } from './participant';
 import { SocietyRoute } from './society';
@@ -12,6 +16,7 @@ export class EventRoute {
   private participantRoute: ParticipantRoute;
   private societyRoute: SocietyRoute;
   private eventAuthMiddleware: EventAuthMiddleware;
+  private uploaderMiddleware: UploaderMiddleware;
 
   constructor() {
     this.router = Router();
@@ -19,6 +24,7 @@ export class EventRoute {
     this.participantRoute = new ParticipantRoute();
     this.societyRoute = new SocietyRoute();
     this.eventAuthMiddleware = new EventAuthMiddleware();
+    this.uploaderMiddleware = new UploaderMiddleware();
 
     this.initializeRoutes();
   }
@@ -39,6 +45,7 @@ export class EventRoute {
     this.router.use('/society', this.societyRoute.router);
     this.router.post(
       '/',
+      this.uploaderMiddleware.uploader.array('images', 5),
       new ValidationMiddleware([CreateEventDto, 'body']).validate,
       this.eventController.createEvent,
     );
