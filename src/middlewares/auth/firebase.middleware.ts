@@ -7,11 +7,13 @@ import { PrismaClient } from '@prisma/client';
 export class FirebaseMiddleware {
   private firebaseProvider: typeof FirebaseProvider;
   private prisma: PrismaClient;
+  private handleError: boolean;
 
-  constructor() {
+  constructor(handleError = true) {
     MethodBinder.bind(this);
     this.firebaseProvider = FirebaseProvider;
     this.prisma = new PrismaClient();
+    this.handleError = handleError;
   }
 
   async verify(req: Request, res: Response, next: NextFunction) {
@@ -47,15 +49,21 @@ export class FirebaseMiddleware {
         role: 'PARTICIPANT',
         image: user?.picture,
       };
-      next();
-    } catch (error) {
-      if (error instanceof FirebaseAuthError) {
-        return res.status(401).json({
-          success: false,
-          message: 'Token validation failed',
-        });
+      if (this.handleError) {
+        next();
       }
-      next(error);
+    } catch (error) {
+      if (this.handleError) {
+        if (error instanceof FirebaseAuthError) {
+          return res.status(401).json({
+            success: false,
+            message: 'Token validation failed',
+          });
+        }
+        next(error);
+      } else {
+        throw error;
+      }
     }
   }
 }

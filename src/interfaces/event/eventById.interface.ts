@@ -13,6 +13,11 @@ export interface IEventById
           venue: true;
         };
       };
-      images: true;
+      images: {
+        select: {
+          url: true;
+          key: true;
+        };
+      };
     };
   }> {}

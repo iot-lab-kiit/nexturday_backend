@@ -103,7 +103,12 @@ export class ParticipantService {
             name: true,
           },
         },
-        images: true,
+        images: {
+          select: {
+            key: true,
+            url: true,
+          },
+        },
       },
     });
 

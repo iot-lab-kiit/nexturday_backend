@@ -58,7 +58,12 @@ export class EventService {
             name: true,
           },
         },
-        images: true,
+        images: {
+          select: {
+            key: true,
+            url: true,
+          },
+        },
       },
     });
 
@@ -91,7 +96,12 @@ export class EventService {
             venue: true,
           },
         },
-        images: true,
+        images: {
+          select: {
+            url: true,
+            key: true,
+          },
+        },
       },
     });
 
@@ -153,12 +163,14 @@ export class EventService {
             from: detail.from,
             to: detail.to,
             type: detail.type,
-            venue: {
-              create: {
-                mapUrl: detail.venue?.mapUrl,
-                name: detail.venue?.name,
+            ...(detail.venue && {
+              venue: {
+                create: {
+                  mapUrl: detail.venue?.mapUrl,
+                  name: detail.venue?.name,
+                },
               },
-            },
+            }),
           })),
         },
       },
@@ -202,6 +214,11 @@ export class EventService {
         },
       },
     });
+    await this.prisma.eventDetail.deleteMany({
+      where: {
+        eventId,
+      },
+    });
     let totalImages = event?._count.images as number;
     if (images && images.length !== 0) {
       totalImages += images.length;
@@ -237,8 +254,8 @@ export class EventService {
         phoneNumbers,
         price,
         registrationUrl,
-        ...(imagesKeys &&
-          imagesKeys.length > 0 && {
+        ...(images &&
+          images.length > 0 && {
             images: {
               create: imagesData.map((imageData) => ({
                 url: imageData.url,
@@ -247,24 +264,21 @@ export class EventService {
             },
           }),
         details: {
-          updateMany: {
-            where: {
-              eventId,
-            },
-            data: details.map((detail) => ({
-              name: detail.name,
-              about: detail.about,
-              from: detail.from,
-              to: detail.to,
-              type: detail.type,
+          create: details.map((detail) => ({
+            name: detail.name,
+            about: detail.about,
+            from: detail.from,
+            to: detail.to,
+            type: detail.type,
+            ...(detail.venue && {
               venue: {
                 create: {
                   mapUrl: detail.venue?.mapUrl,
                   name: detail.venue?.name,
                 },
               },
-            })),
-          },
+            }),
+          })),
         },
       },
     });

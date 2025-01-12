@@ -20,7 +20,7 @@ export class ParticipantRoute {
   }
 
   private initializeRoutes() {
-    this.router.use('favorite', this.favoriteRoute.router);
+    this.router.use('/favorite', this.favoriteRoute.router);
     this.router.post('/:id', this.participantController.joinEvent);
     this.router.get(
       '/',

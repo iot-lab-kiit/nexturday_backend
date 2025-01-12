@@ -50,7 +50,7 @@ export class FavoriteService {
     participantId: string,
     dto: SearchDto,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
-    const totalFavoriteEvents = await this.prisma.eventParticipant.count({
+    const totalFavoriteEvents = await this.prisma.favoriteEvent.count({
       where: {
         participantId,
       },
@@ -94,7 +94,12 @@ export class FavoriteService {
             name: true,
           },
         },
-        images: true,
+        images: {
+          select: {
+            key: true,
+            url: true,
+          },
+        },
       },
     });
 

@@ -7,9 +7,12 @@ import { PrismaClient } from '@prisma/client';
 
 export class JWTMiddleware {
   private prisma: PrismaClient;
-  constructor() {
+  private handleError: boolean;
+
+  constructor(handleError = true) {
     MethodBinder.bind(this);
     this.prisma = new PrismaClient();
+    this.handleError = handleError;
   }
 
   async verify(req: Request, res: Response, next: NextFunction) {
@@ -39,15 +42,21 @@ export class JWTMiddleware {
         role: 'SOCIETY',
         image: user?.image,
       };
-      next();
-    } catch (error) {
-      if (error instanceof JsonWebTokenError) {
-        return res.status(401).json({
-          success: false,
-          message: 'invalid token',
-        });
+      if (this.handleError) {
+        next();
       }
-      next(error);
+    } catch (error) {
+      if (this.handleError) {
+        if (error instanceof JsonWebTokenError) {
+          return res.status(401).json({
+            success: false,
+            message: 'invalid token',
+          });
+        }
+        next(error);
+      } else {
+        throw error;
+      }
     }
   }
 }

@@ -69,6 +69,10 @@ export class EventDto {
   to: Date;
 
   @IsNotEmpty()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    else return false;
+  })
   @IsBoolean()
   paid: boolean;
 
@@ -80,14 +84,22 @@ export class EventDto {
   details: EventDetailDto[];
 
   constructor(payload?: EventDto) {
-    if (!payload?.paid) {
-      delete payload?.registrationUrl;
-      delete payload?.price;
+    if (payload?.details) {
+      const details = JSON.parse(payload.details as unknown as string).map(
+        (detail: EventDetailDto) => {
+          return new EventDetailDto(detail);
+        },
+      ) as EventDetailDto[];
+      const paid =
+        (payload?.paid as unknown as string).toLowerCase() === 'true'
+          ? true
+          : false;
+      if (paid) {
+        delete payload?.registrationUrl;
+        delete payload?.price;
+      }
+      payload = { ...payload, details, paid } as EventDto;
     }
-    const details = payload?.details.map(
-      (detail) => new EventDetailDto(detail),
-    ) as EventDetailDto[];
-    payload = { ...payload, details } as EventDto;
     Object.assign(this, payload);
   }
 }

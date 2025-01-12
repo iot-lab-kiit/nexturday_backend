@@ -8,6 +8,11 @@ export interface IAllEvents
           name: true;
         };
       };
-      images: true;
+      images: {
+        select: {
+          key: true;
+          url: true;
+        };
+      };
     };
   }> {}

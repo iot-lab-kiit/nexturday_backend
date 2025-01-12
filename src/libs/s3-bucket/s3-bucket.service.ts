@@ -20,7 +20,6 @@ export class S3BucketService {
       Key: imageKey,
       Body: file.buffer,
       ContentType: file.contentType,
-      // ACL: 'public-read',
     });
     await this.s3BucketProvider.s3.send(command);
 

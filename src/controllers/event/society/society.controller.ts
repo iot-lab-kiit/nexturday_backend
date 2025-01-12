@@ -22,7 +22,7 @@ export class SocietyController {
       const societyId = (req.user as IUser).sub;
       const dto = plainToInstance(SearchDto, req.query);
       const result = await this.societyService.myEvents(societyId, dto);
-      res.status(201).json(result);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }

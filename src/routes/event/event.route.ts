@@ -31,19 +31,23 @@ export class EventRoute {
   }
 
   private initializeRoutes() {
+    this.router.use(
+      '/participants',
+      new RoleMiddleware('PARTICIPANT').verify,
+      this.participantRoute.router,
+    );
+    this.router.use(
+      '/society',
+      new RoleMiddleware('SOCIETY').verify,
+      this.societyRoute.router,
+    );
     this.router.get(
       '/',
       new ValidationMiddleware([SearchDto, 'query']).validate,
       this.eventController.getAllEvents,
     );
     this.router.get('/:id', this.eventController.getEventById);
-    this.router.use(
-      '/participants',
-      new RoleMiddleware('PARTICIPANT').verify,
-      this.participantRoute.router,
-    );
     this.router.use(new RoleMiddleware('SOCIETY').verify);
-    this.router.use('/society', this.societyRoute.router);
     this.router.post(
       '/',
       this.uploaderMiddleware.uploader.array('images', TOTAL_IMAGES),
@@ -52,6 +56,7 @@ export class EventRoute {
     );
     this.router.patch(
       '/:id',
+      this.eventAuthMiddleware.verify,
       this.uploaderMiddleware.uploader.array('images', TOTAL_IMAGES),
       new ValidationMiddleware([UpdateEventDto, 'body']).validate,
       this.eventController.updateEvent,

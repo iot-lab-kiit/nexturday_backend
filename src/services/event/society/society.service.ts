@@ -60,7 +60,12 @@ export class SocietyService {
             name: true,
           },
         },
-        images: true,
+        images: {
+          select: {
+            key: true,
+            url: true,
+          },
+        },
       },
     });
 

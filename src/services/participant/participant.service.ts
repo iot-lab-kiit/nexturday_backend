@@ -34,10 +34,10 @@ export class ParticipantService {
     });
   }
 
-  async getProfile(uid: string): Promise<IResponse<IParticipant>> {
+  async getProfile(participantId: string): Promise<IResponse<IParticipant>> {
     const participant = await this.prisma.participant.findUnique({
       where: {
-        uid,
+        id: participantId,
       },
       include: {
         detail: true,

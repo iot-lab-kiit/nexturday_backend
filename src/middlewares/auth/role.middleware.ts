@@ -16,6 +16,7 @@ export class RoleMiddleware {
       if (!authorized) {
         throw new CustomError('Unauthorized Exception', 401);
       }
+      next();
     } catch (error) {
       next(error);
     }
