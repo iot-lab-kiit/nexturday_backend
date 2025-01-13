@@ -17,12 +17,12 @@ export class CombinedAuthMiddleware {
     try {
       await this.firebaseMiddleware.verify(req, res, next);
       next();
-    } catch (firebaseError) {
+    } catch (err) {
       try {
         await this.jwtMiddleware.verify(req, res, next);
         next();
-      } catch (jwtError) {
-        next(jwtError);
+      } catch (error) {
+        next(new CustomError('Unauthorized Exception', 401));
       }
     }
   }
