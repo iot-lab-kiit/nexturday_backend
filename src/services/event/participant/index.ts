@@ -1,2 +1,2 @@
-export * from './partricipant.service';
+export * from './participant.service';
 export * from './favorite.service';

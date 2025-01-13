@@ -34,6 +34,17 @@ export class ParticipantService {
     if (event?.paid === true) {
       throw new CustomError('paid event', 400);
     }
+    const registered = await this.prisma.eventParticipant.findUnique({
+      where: {
+        participantId_eventId: {
+          eventId,
+          participantId,
+        },
+      },
+    });
+    if (registered) {
+      throw new CustomError('event already joined', 400);
+    }
     await this.prisma.eventParticipant.create({
       data: {
         eventId,
