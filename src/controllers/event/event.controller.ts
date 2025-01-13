@@ -36,6 +36,15 @@ export class EventController {
     }
   }
 
+  async crousel(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.eventService.crousel();
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async createEvent(
     req: Request,
     res: Response,

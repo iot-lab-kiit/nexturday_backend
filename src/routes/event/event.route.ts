@@ -46,6 +46,7 @@ export class EventRoute {
       new ValidationMiddleware([SearchDto, 'query']).validate,
       this.eventController.getAllEvents,
     );
+    this.router.get('/crousel', this.eventController.crousel);
     this.router.get('/:id', this.eventController.getEventById);
     this.router.use(new RoleMiddleware('SOCIETY').verify);
     this.router.post(

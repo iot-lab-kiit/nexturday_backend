@@ -1,13 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import {
   IAllEvents,
+  ICrousel,
   IEvent,
   IEventById,
   IImageData,
   IPaginatedData,
   IResponse,
 } from '../../interfaces';
-import { TAKE_PAGES, TOTAL_IMAGES } from '../../common/constants';
+import { CROUSEL, TAKE_PAGES, TOTAL_IMAGES } from '../../common/constants';
 import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
 import { UploaderService } from '../uploader';
 import { CustomError } from '../../utils';
@@ -81,6 +82,77 @@ export class EventService {
         totalItems: totalEvents,
         totalPages,
         data: events,
+      },
+    };
+  }
+
+  async crousel(): Promise<IResponse<ICrousel>> {
+    const upcomming = await this.prisma.event.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: CROUSEL,
+      where: {
+        from: {
+          gt: new Date(),
+        },
+      },
+      include: {
+        society: {
+          select: {
+            name: true,
+          },
+        },
+        images: {
+          select: {
+            key: true,
+            url: true,
+          },
+        },
+        details: {
+          select: {
+            venue: true,
+          },
+        },
+      },
+    });
+
+    const popular = await this.prisma.event.findMany({
+      orderBy: {
+        participationCount: 'desc',
+      },
+      take: CROUSEL,
+      where: {
+        to: {
+          gt: new Date(),
+        },
+      },
+      include: {
+        society: {
+          select: {
+            name: true,
+          },
+        },
+        images: {
+          select: {
+            key: true,
+            url: true,
+          },
+        },
+        details: {
+          select: {
+            venue: true,
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: 'crousel fetched successfully',
+      data: {
+        popular,
+        upcomming,
       },
     };
   }
