@@ -78,10 +78,12 @@ model Event {
 }
 
 model Image {
-  url String
-  key String
-  event Event @relation(fields: [eventId],references: [id],onDelete: Cascade)
-  eventId String
+  url       String
+  key       String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([url, key])
 }
@@ -113,6 +115,8 @@ model EventParticipant {
   participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
   eventId       String
   event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@id([participantId, eventId])
 }
