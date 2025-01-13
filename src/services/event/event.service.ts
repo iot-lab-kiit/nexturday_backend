@@ -85,7 +85,27 @@ export class EventService {
     };
   }
 
-  async getEventById(eventId: string): Promise<IResponse<IEventById>> {
+  async getEventById(
+    id: string,
+    role: string,
+    eventId: string,
+  ): Promise<IResponse<IEventById>> {
+    let joined: boolean | undefined;
+    if (role === 'PARTICIPANT') {
+      const participation = await this.prisma.eventParticipant.findUnique({
+        where: {
+          participantId_eventId: {
+            eventId,
+            participantId: id,
+          },
+        },
+      });
+      if (participation) {
+        joined = true;
+      } else {
+        joined = false;
+      }
+    }
     const event = await this.prisma.event.findUnique({
       where: {
         id: eventId,
@@ -113,7 +133,7 @@ export class EventService {
     return {
       success: true,
       message: 'events fetched successfully',
-      data: event,
+      data: { ...(event as IEventById), joined },
     };
   }
 

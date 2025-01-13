@@ -25,7 +25,11 @@ export class EventController {
 
   async getEventById(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await this.eventService.getEventById(req.params.id);
+      const result = await this.eventService.getEventById(
+        req.user?.sub as string,
+        req.user?.role as string,
+        req.params.id,
+      );
       res.status(200).json(result);
     } catch (error) {
       next(error);

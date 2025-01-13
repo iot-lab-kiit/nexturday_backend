@@ -20,4 +20,6 @@ export interface IEventById
         };
       };
     };
-  }> {}
+  }> {
+  joined?: boolean;
+}
