@@ -1,7 +1,6 @@
 import { EventType } from '@prisma/client';
 import {
   IsDate,
-  IsDateString,
   IsIn,
   IsNotEmpty,
   IsString,
@@ -9,8 +8,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { VenueDto } from './venue.dto';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import 'reflect-metadata';
+import { IsAfter, IsNotPast } from '../../decorators';
 
 export class EventDetailDto {
   @IsNotEmpty()
@@ -22,11 +22,15 @@ export class EventDetailDto {
   about: string;
 
   @IsNotEmpty()
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  @IsNotPast()
   from: Date;
 
   @IsNotEmpty()
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  @IsAfter('from')
   to: Date;
 
   @IsNotEmpty()

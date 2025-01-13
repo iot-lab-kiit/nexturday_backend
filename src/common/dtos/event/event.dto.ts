@@ -3,7 +3,7 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -14,6 +14,7 @@ import {
 } from 'class-validator';
 import { EventDetailDto } from './eventdetail.dto';
 import 'reflect-metadata';
+import { IsAfter, IsNotPast } from '../../decorators';
 
 export class EventDto {
   societyId?: string;
@@ -61,11 +62,15 @@ export class EventDto {
   price?: number;
 
   @IsNotEmpty()
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  @IsNotPast()
   from: Date;
 
   @IsNotEmpty()
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  @IsAfter('from')
   to: Date;
 
   @IsNotEmpty()
