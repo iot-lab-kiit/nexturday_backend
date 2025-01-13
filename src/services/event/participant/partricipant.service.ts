@@ -25,7 +25,10 @@ export class ParticipantService {
         id: eventId,
       },
     });
-    if ((event?.from as Date).getTime() < Date.now()) {
+    if (!event) {
+      throw new CustomError('event not found', 404);
+    }
+    if ((event?.to as Date).getTime() < Date.now()) {
       throw new CustomError('event finished', 400);
     }
     if (event?.paid === true) {
