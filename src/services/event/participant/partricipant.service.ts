@@ -109,6 +109,11 @@ export class ParticipantService {
             url: true,
           },
         },
+        details: {
+          select: {
+            venue: true,
+          },
+        },
       },
     });
 

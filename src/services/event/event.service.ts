@@ -64,6 +64,11 @@ export class EventService {
             url: true,
           },
         },
+        details: {
+          select: {
+            venue: true,
+          },
+        },
       },
     });
 

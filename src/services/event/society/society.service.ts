@@ -66,6 +66,11 @@ export class SocietyService {
             url: true,
           },
         },
+        details: {
+          select: {
+            venue: true,
+          },
+        },
       },
     });
 

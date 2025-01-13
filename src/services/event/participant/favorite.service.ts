@@ -100,6 +100,11 @@ export class FavoriteService {
             url: true,
           },
         },
+        details: {
+          select: {
+            venue: true,
+          },
+        },
       },
     });
 
