@@ -14,7 +14,7 @@ import {
 } from 'class-validator';
 import { EventDetailDto } from './eventdetail.dto';
 import 'reflect-metadata';
-import { IsAfter, IsNotPast } from '../../decorators';
+import { IsAfter, IsNotPast, IsWithinRange } from '../../decorators';
 
 export class EventDto {
   societyId?: string;
@@ -86,6 +86,7 @@ export class EventDto {
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => EventDetailDto)
+  @IsWithinRange({ from: 'from', to: 'to' })
   details: EventDetailDto[];
 
   constructor(payload?: EventDto) {
