@@ -75,8 +75,10 @@ export class EventDto {
 
   @IsNotEmpty()
   @Transform(({ value }) => {
-    if (value === 'true') return true;
-    else return false;
+    if (typeof value === 'string') {
+      if (value === 'true') return true;
+      else return false;
+    } else return value;
   })
   @IsBoolean()
   paid: boolean;
@@ -100,7 +102,7 @@ export class EventDto {
         (payload?.paid as unknown as string).toLowerCase() === 'true'
           ? true
           : false;
-      if (paid) {
+      if (!paid) {
         delete payload?.registrationUrl;
         delete payload?.price;
       }
