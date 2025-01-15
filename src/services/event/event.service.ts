@@ -163,6 +163,7 @@ export class EventService {
     eventId: string,
   ): Promise<IResponse<IEventById>> {
     let joined: boolean | undefined;
+    let isFavorite: boolean | undefined;
     if (role === 'PARTICIPANT') {
       const participation = await this.prisma.eventParticipant.findUnique({
         where: {
@@ -172,6 +173,19 @@ export class EventService {
           },
         },
       });
+      const favorite = await this.prisma.favoriteEvent.findUnique({
+        where: {
+          participantId_eventId: {
+            eventId,
+            participantId: id,
+          },
+        },
+      });
+      if (favorite) {
+        isFavorite = true;
+      } else {
+        isFavorite = false;
+      }
       if (participation) {
         joined = true;
       } else {
@@ -202,10 +216,14 @@ export class EventService {
       },
     });
 
+    if (!event) {
+      throw new CustomError('event not found', 404);
+    }
+
     return {
       success: true,
       message: 'events fetched successfully',
-      data: { ...(event as IEventById), joined },
+      data: { ...(event as IEventById), joined, isFavorite },
     };
   }
 

@@ -22,4 +22,5 @@ export interface IEventById
     };
   }> {
   joined?: boolean;
+  isFavorite?: boolean;
 }
