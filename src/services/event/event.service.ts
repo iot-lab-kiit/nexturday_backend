@@ -245,6 +245,7 @@ export class EventService {
       websiteUrl,
       about,
       details,
+      deadline,
     } = dto;
     if (!images || images.length === 0) {
       throw new CustomError('images are required', 400);
@@ -258,6 +259,7 @@ export class EventService {
         name,
         paid,
         to,
+        deadline,
         emails,
         guidlines,
         websiteUrl,

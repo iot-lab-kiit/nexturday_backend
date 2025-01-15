@@ -28,6 +28,9 @@ export class ParticipantService {
     if (!event) {
       throw new CustomError('event not found', 404);
     }
+    if ((event.deadline as Date).getTime() < Date.now()) {
+      throw new CustomError('registration deadline over', 400);
+    }
     if ((event?.to as Date).getTime() < Date.now()) {
       throw new CustomError('event finished', 400);
     }

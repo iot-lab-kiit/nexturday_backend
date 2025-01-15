@@ -14,7 +14,7 @@ import {
 } from 'class-validator';
 import { EventDetailDto } from './eventdetail.dto';
 import 'reflect-metadata';
-import { IsAfter, IsNotPast, IsWithinRange } from '../../decorators';
+import { IsAfter, IsBefore, IsNotPast, IsWithinRange } from '../../decorators';
 
 export class EventDto {
   societyId?: string;
@@ -72,6 +72,12 @@ export class EventDto {
   @IsDate()
   @IsAfter('from')
   to: Date;
+
+  @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  @IsBefore('to')
+  deadline: Date;
 
   @IsNotEmpty()
   @Transform(({ value }) => {
