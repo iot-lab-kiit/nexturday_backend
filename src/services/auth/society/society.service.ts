@@ -6,6 +6,7 @@ import { ILogin, IPayload } from '../../../interfaces/auth/society';
 import { IResponse } from '../../../interfaces';
 import { LoginDto, SignupDto } from '../../../common/dtos/auth/society';
 import { BcryptService } from '../../../common/services';
+import { TOKEN_EXPIRY } from '../../../common/constants';
 
 export class SocietyService {
   private prisma: PrismaClient;
@@ -86,7 +87,7 @@ export class SocietyService {
 
   private jwtToken(payload: IPayload): string {
     return sign(payload, process.env.JWT_SECRET as string, {
-      expiresIn: '48h',
+      expiresIn: TOKEN_EXPIRY,
     });
   }
 }
