@@ -22,7 +22,7 @@ class IsBeforeConstraint implements ValidatorConstraintInterface {
     );
   }
   defaultMessage(validationArguments?: ValidationArguments): string {
-    return `The "${validationArguments?.property}" date must be greater than the "${validationArguments?.constraints[0]}" date.`;
+    return `The "${validationArguments?.property}" date must be less than the "${validationArguments?.constraints[0]}" date.`;
   }
 }
 
