@@ -353,11 +353,6 @@ export class EventService {
         },
       },
     });
-    await this.prisma.eventDetail.deleteMany({
-      where: {
-        eventId,
-      },
-    });
 
     let eventImages: IImage[] = [];
     if (imagesKeys && imagesKeys.length > 0) {
@@ -406,6 +401,12 @@ export class EventService {
         },
       });
     }
+
+    await this.prisma.eventDetail.deleteMany({
+      where: {
+        eventId,
+      },
+    });
 
     await this.prisma.event.update({
       where: {
