@@ -4,6 +4,7 @@ import {
   ICrousel,
   IEvent,
   IEventById,
+  IImage,
   IImageData,
   IPaginatedData,
   IResponse,
@@ -358,14 +359,17 @@ export class EventService {
       },
     });
 
-    const eventImages = await this.prisma.image.findMany({
-      where: {
-        eventId,
-        key: {
-          in: imagesKeys,
+    let eventImages: IImage[] = [];
+    if (imagesKeys && imagesKeys.length > 0) {
+      eventImages = await this.prisma.image.findMany({
+        where: {
+          eventId,
+          key: {
+            in: imagesKeys,
+          },
         },
-      },
-    });
+      });
+    }
 
     let totalImages = event?._count.images as number;
     if (images && images.length !== 0) {
@@ -392,14 +396,16 @@ export class EventService {
       imagesData = await this.uploaderService.uploadMultiple(images);
     }
 
-    await this.prisma.image.deleteMany({
-      where: {
-        eventId,
-        key: {
-          in: imagesKeys,
+    if (imagesKeys && imagesKeys.length > 0) {
+      await this.prisma.image.deleteMany({
+        where: {
+          eventId,
+          key: {
+            in: imagesKeys,
+          },
         },
-      },
-    });
+      });
+    }
 
     await this.prisma.event.update({
       where: {
