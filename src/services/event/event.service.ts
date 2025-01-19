@@ -336,24 +336,49 @@ export class EventService {
         eventId,
       },
     });
+
+    const eventImages = await this.prisma.image.findMany({
+      where: {
+        eventId,
+        key: {
+          in: imagesKeys,
+        },
+      },
+    });
+
     let totalImages = event?._count.images as number;
     if (images && images.length !== 0) {
       totalImages += images.length;
     }
-    if (imagesKeys) {
-      totalImages -= imagesKeys.length;
+    if (eventImages) {
+      totalImages -= eventImages.length;
     }
     if (totalImages > TOTAL_IMAGES) {
       throw new CustomError('images limit reached', 400);
     }
 
-    if (imagesKeys && imagesKeys.length > 0) {
-      await this.uploaderService.deleteMultiple(imagesKeys);
+    if (totalImages <= 0) {
+      throw new CustomError('atleast one image is required', 400);
+    }
+
+    if (eventImages && eventImages.length > 0) {
+      await this.uploaderService.deleteMultiple(
+        eventImages.map((image) => image.key),
+      );
     }
     let imagesData: IImageData[] = [];
     if (images && images.length !== 0) {
       imagesData = await this.uploaderService.uploadMultiple(images);
     }
+
+    await this.prisma.image.deleteMany({
+      where: {
+        eventId,
+        key: {
+          in: imagesKeys,
+        },
+      },
+    });
 
     await this.prisma.event.update({
       where: {
