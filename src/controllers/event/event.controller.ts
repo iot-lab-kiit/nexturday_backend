@@ -16,7 +16,10 @@ export class EventController {
   async getAllEvents(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = plainToInstance(SearchDto, req.query);
-      const result = await this.eventService.getAllEvents(dto);
+      const result = await this.eventService.getAllEvents(
+        dto,
+        req.user?.role as string,
+      );
       res.status(200).json(result);
     } catch (error) {
       next(error);

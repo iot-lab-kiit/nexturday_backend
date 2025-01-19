@@ -24,8 +24,18 @@ export class EventService {
 
   async getAllEvents(
     dto: SearchDto,
+    role: string,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
-    const totalEvents = await this.prisma.event.count();
+    const totalEvents = await this.prisma.event.count({
+      where:
+        role === 'PARTICIPANT'
+          ? {
+              to: {
+                gte: new Date(),
+              },
+            }
+          : {},
+    });
     const totalPages = Math.ceil(totalEvents / TAKE_PAGES);
     const nextPage = totalPages > dto.page ? dto.page + 1 : null;
     const events = await this.prisma.event.findMany({
@@ -44,15 +54,26 @@ export class EventService {
           ]
         : [{ [dto.field]: dto.direction }],
 
-      where: dto.q
-        ? {
-            OR: [
-              { name: { search: dto.q } },
-              { about: { search: dto.q } },
-              { society: { name: { search: dto.q } } },
-            ],
-          }
-        : undefined,
+      where: {
+        AND: [
+          dto.q
+            ? {
+                OR: [
+                  { name: { search: dto.q } },
+                  { about: { search: dto.q } },
+                  { society: { name: { search: dto.q } } },
+                ],
+              }
+            : {},
+          role === 'PARTICIPANT'
+            ? {
+                to: {
+                  gte: new Date(),
+                },
+              }
+            : {},
+        ],
+      },
       include: {
         society: {
           select: {
@@ -89,7 +110,7 @@ export class EventService {
   async crousel(): Promise<IResponse<ICrousel>> {
     const upcomming = await this.prisma.event.findMany({
       orderBy: {
-        createdAt: 'desc',
+        from: 'desc',
       },
       take: CROUSEL,
       where: {
