@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/common/dtos/participant/createParticipant.dto.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/common/dtos/participant/createParticipant.dto.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/controllers/event/event.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/controllers/event/event.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/controllers/event/society/society.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/controllers/event/society/society.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/routes/event/event.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/event/event.route.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/routes/event/participant/participant.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/event/participant/participant.route.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/routes/event/society/society.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/event/society/society.route.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/routes/route.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/routes/route.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/services/event/event.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/services/event/event.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/services/event/participant/partricipant.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/services/event/participant/partricipant.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/src/services/event/society/society.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/src/services/event/society/society.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

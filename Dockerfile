@@ -12,4 +12,4 @@ RUN npx prisma generate
 EXPOSE 8080
 
 # Define the command to run the application
-CMD ["npm", "run", "build"]
+CMD ["npm", "run", "start"]
