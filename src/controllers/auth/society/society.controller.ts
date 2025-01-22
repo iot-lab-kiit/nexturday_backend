@@ -15,8 +15,9 @@ export class SocietyController {
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const dto = plainToInstance(LoginDto, req.body);
-      const result = await this.societyService.login(dto);
-      res.status(201).json(result);
+      let result = await this.societyService.login(dto);
+      result = {...result, data: {...result.data, accessToken: ""}};
+      res.cookie("token",result.data?.accessToken).status(201).json(result);
     } catch (error) {
       next(error);
     }

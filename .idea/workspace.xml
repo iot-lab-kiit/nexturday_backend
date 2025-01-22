@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/auth/society/society.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/auth/society/society.controller.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +88,9 @@
       <workItem from="1736180784707" duration="6000" />
       <workItem from="1736270064161" duration="12000" />
       <workItem from="1736517167283" duration="733000" />
+      <workItem from="1737480995431" duration="612000" />
+      <workItem from="1737546490806" duration="614000" />
+      <workItem from="1737557636351" duration="416000" />
     </task>
     <servers />
   </component>
