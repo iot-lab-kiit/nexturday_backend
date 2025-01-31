@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/auth/society/society.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/auth/society/society.controller.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +49,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/dibyajyotidey/WebstormProjects/nexturday_backend/src/routes&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/dibyajyotidey/WebstormProjects/raiders_reckoning_backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -90,7 +91,14 @@
       <workItem from="1736517167283" duration="733000" />
       <workItem from="1737480995431" duration="612000" />
       <workItem from="1737546490806" duration="614000" />
-      <workItem from="1737557636351" duration="416000" />
+      <workItem from="1737557636351" duration="1248000" />
+      <workItem from="1737625033428" duration="42000" />
+      <workItem from="1737709963682" duration="619000" />
+      <workItem from="1738153785512" duration="13000" />
+      <workItem from="1738153849018" duration="11000" />
+      <workItem from="1738153884394" duration="607000" />
+      <workItem from="1738230688064" duration="4000" />
+      <workItem from="1738349935663" duration="300000" />
     </task>
     <servers />
   </component>

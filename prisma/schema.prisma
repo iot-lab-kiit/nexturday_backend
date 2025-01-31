@@ -19,7 +19,9 @@ model Participant {
   id              String             @id @default(uuid())
   uid             String             @unique
   rollNo          String
-  email           String             @unique
+  universityEmail String             @unique
+  personalEmail   String             @unique
+  isKiitStudent   Boolean
   imageUrl        String?
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
@@ -30,9 +32,11 @@ model Participant {
 
 model ParticipantDetail {
   id             String      @id @default(uuid())
-  name           String
+  firstname      String
+  lastname       String
   branch         String
   phoneNumber    String
+  countryCode    String
   whatsappNumber String
   studyYear      Int
   participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
@@ -54,28 +58,31 @@ model Society {
 }
 
 model Event {
-  id                 String             @id @default(uuid())
-  paid               Boolean
-  images             Image[]
-  name               String
-  society            Society            @relation(fields: [societyId], references: [id], onDelete: Cascade)
-  societyId          String
-  about              String
-  websiteUrl         String?
-  emails             String[]
-  guidlines          String[]
-  phoneNumbers       String[]
-  registrationUrl    String?
-  price              Int                @default(0)
-  from               DateTime
-  to                 DateTime
-  deadline           DateTime
-  participationCount Int                @default(0)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  participants       EventParticipant[]
-  favoriteBy         FavoriteEvent[]
-  details            EventDetail[]
+  id                          String             @id @default(uuid())
+  paid                        Boolean
+  images                      Image[]
+  name                        String
+  society                     Society            @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  societyId                   String
+  about                       String
+  websiteUrl                  String?
+  emails                      String[]
+  guidlines                   String[]
+  phoneNumbers                String[]
+  registrationUrl             String?
+  price                       Int                @default(0)
+  from                        DateTime
+  to                          DateTime
+  deadline                    DateTime
+  maxTeamSize                 Int
+  isOutsideParticipantAllowed Boolean
+  evenTags                    String[]
+  participationCount          Int                @default(0)
+  createdAt                   DateTime           @default(now())
+  updatedAt                   DateTime           @updatedAt
+  participants                EventParticipant[]
+  favoriteBy                  FavoriteEvent[]
+  details                     EventDetail[]
 }
 
 model Image {
