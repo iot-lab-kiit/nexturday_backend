@@ -26,7 +26,8 @@ model Participant {
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
   detail          ParticipantDetail?
-  attemptedEvents EventParticipant[]
+  leaderOfTeams   Team[]
+  teams           TeamMember[]
   favoriteEvents  FavoriteEvent[]
 }
 
@@ -58,11 +59,11 @@ model Society {
 }
 
 model Event {
-  id                          String             @id @default(uuid())
+  id                          String          @id @default(uuid())
   paid                        Boolean
   images                      Image[]
   name                        String
-  society                     Society            @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  society                     Society         @relation(fields: [societyId], references: [id], onDelete: Cascade)
   societyId                   String
   about                       String
   websiteUrl                  String?
@@ -70,17 +71,17 @@ model Event {
   guidlines                   String[]
   phoneNumbers                String[]
   registrationUrl             String?
-  price                       Int                @default(0)
+  price                       Int             @default(0)
   from                        DateTime
   to                          DateTime
   deadline                    DateTime
-  maxTeamSize                 Int
+  maxTeamSize                 Int             @default(1)
   isOutsideParticipantAllowed Boolean
   evenTags                    String[]
-  participationCount          Int                @default(0)
-  createdAt                   DateTime           @default(now())
-  updatedAt                   DateTime           @updatedAt
-  participants                EventParticipant[]
+  teamCount                   Int             @default(0)
+  createdAt                   DateTime        @default(now())
+  updatedAt                   DateTime        @updatedAt
+  teams                       Team[]
   favoriteBy                  FavoriteEvent[]
   details                     EventDetail[]
 }
@@ -118,15 +119,26 @@ model Venue {
   eventDetails EventDetail[]
 }
 
-model EventParticipant {
-  participantId String
+model Team {
+  id        String       @id @default(uuid())
+  leaderId  String
+  leader    Participant  @relation(fields: [leaderId], references: [id], onDelete: Cascade)
+  eventId   String
+  event     Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  members   TeamMember[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model TeamMember {
+  teamId        String
+  team          Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
   participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
-  eventId       String
-  event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  participantId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  @@id([participantId, eventId])
+  @@id([teamId, participantId])
 }
 
 model FavoriteEvent {

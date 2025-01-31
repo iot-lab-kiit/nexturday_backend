@@ -17,7 +17,7 @@ export class SocietyController {
       const dto = plainToInstance(LoginDto, req.body);
       let result = await this.societyService.login(dto);
       // result = {...result, data: {...result.data, accessToken: ""}};
-      res.cookie("token",result.data?.accessToken).status(201).json(result);
+      res.cookie('token', result.data?.accessToken).status(201).json(result);
     } catch (error) {
       next(error);
     }
