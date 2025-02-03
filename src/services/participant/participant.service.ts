@@ -14,11 +14,25 @@ export class ParticipantService {
   }
 
   async createParticipant(dto: CreateParticipantDto): Promise<void> {
-    const { email, rollNo, uid, imageUrl } = dto;
+    const {
+      isKiitStudent,
+      personalEmail,
+      universityEmail,
+      rollNo,
+      uid,
+      imageUrl,
+    } = dto;
 
-    const society = await this.prisma.society.findUnique({
+    const society = await this.prisma.society.findFirst({
       where: {
-        email,
+        OR: [
+          {
+            email: universityEmail,
+          },
+          {
+            email: personalEmail,
+          },
+        ],
       },
     });
     if (society) {
@@ -26,7 +40,9 @@ export class ParticipantService {
     }
     await this.prisma.participant.create({
       data: {
-        email,
+        isKiitStudent,
+        personalEmail,
+        universityEmail,
         rollNo,
         imageUrl,
         uid,
@@ -57,7 +73,9 @@ export class ParticipantService {
       phoneNumber,
       studyYear,
       whatsappNumber,
-      name,
+      countryCode,
+      firstname,
+      lastname,
       participantId,
     } = dto;
     await this.prisma.participantDetail.upsert({
@@ -69,7 +87,9 @@ export class ParticipantService {
         phoneNumber,
         whatsappNumber,
         studyYear,
-        name,
+        firstname,
+        lastname,
+        countryCode,
         participant: {
           connect: {
             id: participantId,
@@ -81,7 +101,9 @@ export class ParticipantService {
         phoneNumber,
         whatsappNumber,
         studyYear,
-        name,
+        firstname,
+        lastname,
+        countryCode,
       },
     });
 

@@ -7,6 +7,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { IsCountryCode } from '../../decorators';
 
 export class UpdateParticipantDetailDto {
   participantId: string;
@@ -17,7 +18,16 @@ export class UpdateParticipantDetailDto {
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  firstname: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lastname: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsCountryCode()
+  countryCode: string;
 
   @IsNotEmpty()
   @IsString()
