@@ -91,28 +91,28 @@ export class SocietyService {
     eventId: string,
     dto: SearchDto,
   ): Promise<IResponse<IPaginatedData<IEventParticipant>>> {
-    const totalParticipants = await this.prisma.eventParticipant.count({
+    const totalTeams = await this.prisma.team.count({
       where: {
         eventId,
       },
     });
-    const totalPages = Math.ceil(totalParticipants / TAKE_PAGES);
+    const totalPages = Math.ceil(totalTeams / TAKE_PAGES);
     const nextPage = totalPages > dto.page ? dto.page + 1 : null;
-    const participants = await this.prisma.eventParticipant.findMany({
+    const teams = await this.prisma.team.findMany({
       skip: (dto.page - 1) * TAKE_PAGES,
       take: TAKE_PAGES,
       orderBy: dto.q
         ? [
             {
-              participant: {
+              leader: {
                 _relevance: {
-                  fields: ['email', 'rollNo'],
+                  fields: ['personalEmail', 'universityEmail', 'rollNo'],
                   search: dto.q,
                   sort: 'desc',
                 },
                 detail: {
                   _relevance: {
-                    fields: ['name'],
+                    fields: ['firstname', 'lastname'],
                     search: dto.q,
                     sort: 'desc',
                   },
@@ -124,23 +124,73 @@ export class SocietyService {
         : [{ [dto.field]: dto.direction }],
       where: {
         eventId,
-        participant: dto.q
+        leader: dto.q
           ? {
               OR: [
-                { detail: { name: { search: dto.q } } },
-                { email: { search: dto.q } },
+                {
+                  detail: {
+                    firstname: { search: dto.q },
+                    lastname: { search: dto.q },
+                  },
+                },
+                {
+                  personalEmail: { search: dto.q },
+                  universityEmail: { search: dto.q },
+                },
                 { rollNo: { search: dto.q } },
               ],
             }
           : undefined,
+        members: {
+          some: dto.q
+            ? {
+                participant: {
+                  OR: [
+                    {
+                      detail: {
+                        firstname: { search: dto.q },
+                        lastname: { search: dto.q },
+                      },
+                    },
+                    {
+                      personalEmail: { search: dto.q },
+                      universityEmail: { search: dto.q },
+                    },
+                    { rollNo: { search: dto.q } },
+                  ],
+                },
+              }
+            : undefined,
+        },
       },
       include: {
-        participant: {
+        leader: {
           include: {
             detail: true,
           },
         },
+        members: {
+          include: {
+            participant: {
+              include: {
+                detail: true,
+              },
+            },
+          },
+        },
       },
+    });
+
+    const filteredTeams = teams.filter((team) => {
+      return team.members.some((member) => {
+        return (
+          member.participant.personalEmail === dto.q ||
+          member.participant.universityEmail === dto.q ||
+          member.participant.rollNo === dto.q ||
+          member.participant.detail?.firstname === dto.q ||
+          member.participant.detail?.lastname === dto.q
+        );
+      });
     });
 
     return {
@@ -149,9 +199,9 @@ export class SocietyService {
       data: {
         currentPage: dto.page,
         nextPage,
-        totalItems: totalParticipants,
+        totalItems: totalTeams,
         totalPages,
-        data: participants,
+        data: filteredTeams,
       },
     };
   }

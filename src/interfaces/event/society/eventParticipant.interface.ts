@@ -1,11 +1,20 @@
 import { Prisma } from '@prisma/client';
 
 export interface IEventParticipant
-  extends Prisma.EventParticipantGetPayload<{
+  extends Prisma.TeamGetPayload<{
     include: {
-      participant: {
+      leader: {
         include: {
           detail: true;
+        };
+      };
+      members: {
+        include: {
+          participant: {
+            include: {
+              detail: true;
+            };
+          };
         };
       };
     };

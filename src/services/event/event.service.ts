@@ -141,7 +141,7 @@ export class EventService {
 
     const popular = await this.prisma.event.findMany({
       orderBy: {
-        participationCount: 'desc',
+        teamCount: 'desc',
       },
       take: CROUSEL,
       where: {
@@ -180,26 +180,39 @@ export class EventService {
   }
 
   async getEventById(
-    id: string,
+    participantId: string,
     role: string,
     eventId: string,
   ): Promise<IResponse<IEventById>> {
     let joined: boolean | undefined;
     let isFavorite: boolean | undefined;
     if (role === 'PARTICIPANT') {
-      const participation = await this.prisma.eventParticipant.findUnique({
+      const participation = await this.prisma.team.findFirst({
         where: {
-          participantId_eventId: {
-            eventId,
-            participantId: id,
-          },
+          AND: [
+            { eventId },
+            {
+              OR: [
+                {
+                  leaderId: participantId,
+                },
+                {
+                  members: {
+                    some: {
+                      participantId,
+                    },
+                  },
+                },
+              ],
+            },
+          ],
         },
       });
       const favorite = await this.prisma.favoriteEvent.findUnique({
         where: {
           participantId_eventId: {
             eventId,
-            participantId: id,
+            participantId,
           },
         },
       });
@@ -268,6 +281,8 @@ export class EventService {
       about,
       details,
       deadline,
+      isOutsideParticipantAllowed,
+      maxTeamSize,
     } = dto;
     if (!images || images.length === 0) {
       throw new CustomError('images are required', 400);
@@ -295,6 +310,8 @@ export class EventService {
             key: imageData.key,
           })),
         },
+        maxTeamSize,
+        isOutsideParticipantAllowed,
         details: {
           create: details.map((detail) => ({
             name: detail.name,

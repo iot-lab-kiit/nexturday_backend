@@ -21,11 +21,11 @@ export class ParticipantRoute {
 
   private initializeRoutes() {
     this.router.use('/favorite', this.favoriteRoute.router);
-    this.router.post('/:id', this.participantController.joinEvent);
-    this.router.get(
-      '/',
-      new ValidationMiddleware([SearchDto, 'query']).validate,
-      this.participantController.getAllJoinedEvents,
-    );
+    // this.router.post('/:id', this.participantController.joinEvent);
+    // this.router.get(
+    //   '/',
+    //   new ValidationMiddleware([SearchDto, 'query']).validate,
+    //   this.participantController.getAllJoinedEvents,
+    // );
   }
 }

@@ -76,7 +76,7 @@ model Event {
   to                          DateTime
   deadline                    DateTime
   maxTeamSize                 Int             @default(1)
-  isOutsideParticipantAllowed Boolean
+  isOutsideParticipantAllowed Boolean         @default(false)
   evenTags                    String[]
   teamCount                   Int             @default(0)
   createdAt                   DateTime        @default(now())

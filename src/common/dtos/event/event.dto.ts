@@ -4,6 +4,7 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -96,6 +97,15 @@ export class EventDto {
   @Type(() => EventDetailDto)
   @IsWithinRange({ from: 'from', to: 'to' })
   details: EventDetailDto[];
+
+  @IsOptional()
+  @IsInt()
+  @Min(2)
+  maxTeamSize?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isOutsideParticipantAllowed?: boolean;
 
   constructor(payload?: EventDto) {
     if (payload?.details) {
