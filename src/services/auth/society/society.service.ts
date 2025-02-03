@@ -58,9 +58,16 @@ export class SocietyService {
         email,
       },
     });
-    const participant = await this.prisma.participant.findUnique({
+    const participant = await this.prisma.participant.findFirst({
       where: {
-        email,
+        OR: [
+          {
+            universityEmail: email,
+          },
+          {
+            personalEmail: email,
+          },
+        ],
       },
     });
     if (society || participant) {
