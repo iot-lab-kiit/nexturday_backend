@@ -26,6 +26,7 @@ export class EventService {
   async getAllEvents(
     dto: SearchDto,
     role: string,
+    isKiitStudent: boolean,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
     const totalEvents = await this.prisma.event.count({
       where:
@@ -73,6 +74,7 @@ export class EventService {
                 },
               }
             : {},
+          isKiitStudent ? {} : { isOutsideParticipantAllowed: true },
         ],
       },
       include: {
