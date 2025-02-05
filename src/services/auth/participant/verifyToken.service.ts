@@ -30,10 +30,11 @@ export class VerifyTokenService {
         uid: user.uid,
       },
     });
+    const email = user.email as string;
     if (!participant) {
       await this.participantService.createParticipant({
-        email: user.email,
-        rollNo: user.email.replace('@kiit.ac.in', ''),
+        universityEmail: email,
+        isKiitStudent: email.endsWith('@kiit.ac.in') ? true : false,
         uid: user.uid,
         imageUrl: user.picture,
       });

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { MethodBinder } from '../../../utils';
-import { IUser } from '../../../interfaces/express/user.interface';
+import { IParticipant } from '../../../interfaces/express/user.interface';
 import { FavoriteService } from '../../../services/event/participant';
 import { plainToInstance } from 'class-transformer';
 import { SearchDto } from '../../../common/dtos';
@@ -19,7 +19,7 @@ export class FavoriteController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const participantId = (req.user as IUser).sub;
+      const participantId = (req.user as IParticipant).sub;
       const eventId = req.params.id;
       const result = await this.favoriteService.favoriteEvent(
         participantId,
@@ -37,7 +37,7 @@ export class FavoriteController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const participantId = (req.user as IUser).sub;
+      const participantId = (req.user as IParticipant).sub;
       const eventId = req.params.id;
       const result = await this.favoriteService.unfavoriteEvent(
         participantId,
@@ -55,7 +55,7 @@ export class FavoriteController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const participantId = (req.user as IUser).sub;
+      const participantId = (req.user as IParticipant).sub;
       const dto = plainToInstance(SearchDto, req.query);
       const result = await this.favoriteService.getAllFavoriteEvents(
         participantId,

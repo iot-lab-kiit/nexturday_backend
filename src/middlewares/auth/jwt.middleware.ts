@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, verify } from 'jsonwebtoken';
-import { IUser } from '../../interfaces/express/user.interface';
+import { ISociety, IUser } from '../../interfaces/express/user.interface';
 import { CustomError, MethodBinder } from '../../utils';
 import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
@@ -23,7 +23,7 @@ export class JWTMiddleware {
       }
       const token = req.headers.authorization?.split(' ')[1] as string;
 
-      const user = verify(token, process.env.JWT_SECRET as string) as IUser;
+      const user = verify(token, process.env.JWT_SECRET as string) as ISociety;
 
       const society = await this.prisma.society.findUnique({
         where: {

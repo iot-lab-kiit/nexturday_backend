@@ -26,7 +26,7 @@ export class EventService {
   async getAllEvents(
     dto: SearchDto,
     role: string,
-    isKiitStudent: boolean,
+    isKiitStudent = true,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
     const totalEvents = await this.prisma.event.count({
       where:
@@ -185,9 +185,43 @@ export class EventService {
     participantId: string,
     role: string,
     eventId: string,
+    isKiitStudent = true,
   ): Promise<IResponse<IEventById>> {
     let joined: boolean | undefined;
     let isFavorite: boolean | undefined;
+
+    const event = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      include: {
+        society: {
+          omit: {
+            password: true,
+          },
+        },
+        details: {
+          include: {
+            venue: true,
+          },
+        },
+        images: {
+          select: {
+            url: true,
+            key: true,
+          },
+        },
+      },
+    });
+
+    if (!event) {
+      throw new CustomError('event not found', 404);
+    }
+
+    if (!isKiitStudent && !event.isOutsideParticipantAllowed) {
+      throw new CustomError('Unauthorised Exception', 401);
+    }
+
     if (role === 'PARTICIPANT') {
       const participation = await this.prisma.team.findFirst({
         where: {
@@ -228,33 +262,6 @@ export class EventService {
       } else {
         joined = false;
       }
-    }
-    const event = await this.prisma.event.findUnique({
-      where: {
-        id: eventId,
-      },
-      include: {
-        society: {
-          omit: {
-            password: true,
-          },
-        },
-        details: {
-          include: {
-            venue: true,
-          },
-        },
-        images: {
-          select: {
-            url: true,
-            key: true,
-          },
-        },
-      },
-    });
-
-    if (!event) {
-      throw new CustomError('event not found', 404);
     }
 
     return {

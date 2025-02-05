@@ -3,7 +3,10 @@ import { EventService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
 import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
-import { IUser } from '../../interfaces/express/user.interface';
+import {
+  IParticipant,
+  ISociety,
+} from '../../interfaces/express/user.interface';
 
 export class EventController {
   private eventService: EventService;
@@ -19,6 +22,7 @@ export class EventController {
       const result = await this.eventService.getAllEvents(
         dto,
         req.user?.role as string,
+        (req.user as IParticipant).isKiitStudent,
       );
       res.status(200).json(result);
     } catch (error) {
@@ -54,7 +58,7 @@ export class EventController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const societyId = (req.user as IUser).sub;
+      const societyId = (req.user as ISociety).sub;
       const dto = plainToInstance(EventDto, {
         societyId,
         ...(req.body as Object),

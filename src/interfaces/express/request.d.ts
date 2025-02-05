@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import { IUser } from './user.interface';
+import { IParticipant, ISociety } from './user.interface';
 
 declare module 'express' {
   interface Request {
-    user?: IUser;
+    user?: IParticipant | ISociety;
   }
 }

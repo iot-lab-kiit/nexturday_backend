@@ -3,6 +3,7 @@ import { CustomError, MethodBinder } from '../../utils';
 import { FirebaseProvider } from '../../libs/firebase';
 import { NextFunction, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { IParticipant } from '../../interfaces/express/user.interface';
 
 export class FirebaseMiddleware {
   private firebaseProvider: typeof FirebaseProvider;
@@ -28,13 +29,9 @@ export class FirebaseMiddleware {
         token,
       );
 
-      if (!user.email?.endsWith('@kiit.ac.in')) {
-        throw new CustomError('kiit email allowed', 401);
-      }
-
       const participant = await this.prisma.participant.findUnique({
         where: {
-          email: user.email,
+          universityEmail: user.email,
         },
       });
 
@@ -42,13 +39,19 @@ export class FirebaseMiddleware {
         throw new CustomError('participant not found', 404);
       }
 
+      const name = user.name.split(' ');
+      const email = user.email as string;
+
       req.user = {
-        email: user.email,
-        name: user.name,
+        universityEmail: email,
+        firstname: name[0],
+        lastname: name[1],
         sub: participant?.id,
         role: 'PARTICIPANT',
         image: user?.picture,
-      };
+        isKiitStudent: email.endsWith('@kiit.ac.in') ? true : false,
+      } as IParticipant;
+
       if (this.handleError) {
         next();
       }

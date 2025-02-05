@@ -1,6 +1,8 @@
 import {
+  IsEmail,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
@@ -47,4 +49,8 @@ export class UpdateParticipantDetailDto {
   @IsInt()
   @Min(0)
   studyYear: number;
+
+  @IsOptional()
+  @IsEmail()
+  personalEmail?: string;
 }

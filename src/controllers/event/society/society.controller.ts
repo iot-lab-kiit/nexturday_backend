@@ -3,7 +3,7 @@ import { SocietyService } from '../../../services/event/society';
 import { MethodBinder } from '../../../utils';
 import { plainToInstance } from 'class-transformer';
 import { SearchDto } from '../../../common/dtos';
-import { IUser } from '../../../interfaces/express/user.interface';
+import { ISociety } from '../../../interfaces/express/user.interface';
 
 export class SocietyController {
   private societyService: SocietyService;
@@ -19,7 +19,7 @@ export class SocietyController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const societyId = (req.user as IUser).sub;
+      const societyId = (req.user as ISociety).sub;
       const dto = plainToInstance(SearchDto, req.query);
       const result = await this.societyService.myEvents(societyId, dto);
       res.status(200).json(result);

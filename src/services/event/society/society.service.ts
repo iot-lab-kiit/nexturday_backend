@@ -106,7 +106,7 @@ export class SocietyService {
             {
               leader: {
                 _relevance: {
-                  fields: ['personalEmail', 'universityEmail', 'rollNo'],
+                  fields: ['universityEmail', 'rollNo'],
                   search: dto.q,
                   sort: 'desc',
                 },
@@ -134,7 +134,6 @@ export class SocietyService {
                   },
                 },
                 {
-                  personalEmail: { search: dto.q },
                   universityEmail: { search: dto.q },
                 },
                 { rollNo: { search: dto.q } },
@@ -153,7 +152,6 @@ export class SocietyService {
                       },
                     },
                     {
-                      personalEmail: { search: dto.q },
                       universityEmail: { search: dto.q },
                     },
                     { rollNo: { search: dto.q } },
@@ -184,7 +182,6 @@ export class SocietyService {
     const filteredTeams = teams.filter((team) => {
       return team.members.some((member) => {
         return (
-          member.participant.personalEmail === dto.q ||
           member.participant.universityEmail === dto.q ||
           member.participant.rollNo === dto.q ||
           member.participant.detail?.firstname === dto.q ||

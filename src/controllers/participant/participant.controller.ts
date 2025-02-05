@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ParticipantService } from '../../services';
 import { MethodBinder } from '../../utils';
 import { plainToInstance } from 'class-transformer';
-import { IUser } from '../../interfaces/express/user.interface';
+import { IParticipant } from '../../interfaces/express/user.interface';
 import { UpdateParticipantDetailDto } from '../../common/dtos';
 
 export class ParticipantController {
@@ -20,7 +20,7 @@ export class ParticipantController {
   ): Promise<void> {
     try {
       const result = await this.participantService.getProfile(
-        (req.user as IUser).sub,
+        (req.user as IParticipant).sub,
       );
       res.status(200).json(result);
     } catch (error) {
@@ -34,7 +34,7 @@ export class ParticipantController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const participantId = (req.user as IUser).sub;
+      const participantId = (req.user as IParticipant).sub;
       const dto = plainToInstance(UpdateParticipantDetailDto, {
         ...req.body,
         participantId,

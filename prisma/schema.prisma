@@ -18,9 +18,8 @@ datasource db {
 model Participant {
   id              String             @id @default(uuid())
   uid             String             @unique
-  rollNo          String
+  rollNo          String?
   universityEmail String             @unique
-  personalEmail   String             @unique
   isKiitStudent   Boolean
   imageUrl        String?
   createdAt       DateTime           @default(now())
@@ -40,6 +39,7 @@ model ParticipantDetail {
   countryCode    String
   whatsappNumber String
   studyYear      Int
+  personalEmail  String?
   participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
   participantId  String      @unique
   createdAt      DateTime    @default(now())

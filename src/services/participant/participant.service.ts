@@ -14,34 +14,22 @@ export class ParticipantService {
   }
 
   async createParticipant(dto: CreateParticipantDto): Promise<void> {
-    const {
-      isKiitStudent,
-      personalEmail,
-      universityEmail,
-      rollNo,
-      uid,
-      imageUrl,
-    } = dto;
+    const { isKiitStudent, universityEmail, uid, imageUrl } = dto;
 
     const society = await this.prisma.society.findFirst({
       where: {
-        OR: [
-          {
-            email: universityEmail,
-          },
-          {
-            email: personalEmail,
-          },
-        ],
+        email: universityEmail,
       },
     });
     if (society) {
       throw new CustomError('email already registered as society', 400);
     }
+    const rollNo = universityEmail.endsWith('@kiit.ac.in')
+      ? universityEmail.split('@')[0]
+      : null;
     await this.prisma.participant.create({
       data: {
         isKiitStudent,
-        personalEmail,
         universityEmail,
         rollNo,
         imageUrl,
@@ -76,6 +64,7 @@ export class ParticipantService {
       countryCode,
       firstname,
       lastname,
+      personalEmail,
       participantId,
     } = dto;
     await this.prisma.participantDetail.upsert({
@@ -90,6 +79,7 @@ export class ParticipantService {
         firstname,
         lastname,
         countryCode,
+        personalEmail,
         participant: {
           connect: {
             id: participantId,
@@ -104,6 +94,7 @@ export class ParticipantService {
         firstname,
         lastname,
         countryCode,
+        personalEmail,
       },
     });
 

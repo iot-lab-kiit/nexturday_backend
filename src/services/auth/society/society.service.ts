@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { CustomError } from '../../../utils';
-import { compare, hash } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { ILogin, IPayload } from '../../../interfaces/auth/society';
 import { IResponse } from '../../../interfaces';
@@ -60,14 +60,7 @@ export class SocietyService {
     });
     const participant = await this.prisma.participant.findFirst({
       where: {
-        OR: [
-          {
-            universityEmail: email,
-          },
-          {
-            personalEmail: email,
-          },
-        ],
+        universityEmail: email,
       },
     });
     if (society || participant) {
