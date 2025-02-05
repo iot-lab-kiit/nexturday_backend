@@ -9,3 +9,4 @@ services:
       - "18321:8080"
     env_file:
       - .env
+    restart: unless-stopped
