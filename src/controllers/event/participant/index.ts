@@ -1,2 +1,2 @@
 export * from './favorite.controller';
-export * from './participant.controller';
+export * from './team.controller';

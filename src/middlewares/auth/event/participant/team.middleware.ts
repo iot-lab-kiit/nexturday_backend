@@ -6,7 +6,7 @@ import {
   IUser,
 } from '../../../../interfaces/express/user.interface';
 
-export class FavoriteAuthMiddleware {
+export class TeamAuthMiddleware {
   private prisma: PrismaClient;
 
   constructor() {
@@ -17,16 +17,31 @@ export class FavoriteAuthMiddleware {
   async verify(req: Request, res: Response, next: NextFunction) {
     try {
       const participantId = (req.user as IParticipant).sub;
-      const eventId = req.params.id;
-      const event = await this.prisma.favoriteEvent.findUnique({
+      const teamId = req.params.id;
+      const team = await this.prisma.team.findFirst({
         where: {
-          participantId_eventId: {
-            eventId,
-            participantId,
-          },
+          AND: [
+            {
+              id: teamId,
+            },
+            {
+              OR: [
+                {
+                  leaderId: participantId,
+                },
+                {
+                  members: {
+                    some: {
+                      participantId,
+                    },
+                  },
+                },
+              ],
+            },
+          ],
         },
       });
-      if (!event) {
+      if (!team) {
         throw new CustomError('Unauthorized Exception', 401);
       }
       next();

@@ -1,2 +1,2 @@
 export * from './favorite.route';
-export * from './participant.route';
+export * from './team.route';
