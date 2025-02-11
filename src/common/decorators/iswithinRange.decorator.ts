@@ -16,6 +16,10 @@ class IsWithinRangeContraint implements ValidatorConstraintInterface {
     const from = (validationArguments?.object as any)[propertyNames?.from];
     const to = (validationArguments?.object as any)[propertyNames?.to];
 
+    if (!value) {
+      return false;
+    }
+
     return value.every(
       (dto: any) =>
         new Date(dto.from) >= new Date(from) &&

@@ -29,14 +29,18 @@ export class EventService {
     isKiitStudent = true,
   ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
     const totalEvents = await this.prisma.event.count({
-      where:
-        role === 'PARTICIPANT'
-          ? {
-              to: {
-                gte: new Date(),
-              },
-            }
-          : {},
+      where: {
+        AND: [
+          role === 'PARTICIPANT'
+            ? {
+                to: {
+                  gte: new Date(),
+                },
+              }
+            : {},
+          { isApproved: true },
+        ],
+      },
     });
     const totalPages = Math.ceil(totalEvents / TAKE_PAGES);
     const nextPage = totalPages > dto.page ? dto.page + 1 : null;
@@ -47,7 +51,7 @@ export class EventService {
         ? [
             {
               _relevance: {
-                fields: ['name', 'about'],
+                fields: ['name', 'about', 'tags'],
                 search: dto.q,
                 sort: 'desc',
               },
@@ -63,6 +67,7 @@ export class EventService {
                 OR: [
                   { name: { search: dto.q } },
                   { about: { search: dto.q } },
+                  { tags: { has: dto.q } },
                   { society: { name: { search: dto.q } } },
                 ],
               }
@@ -75,6 +80,7 @@ export class EventService {
               }
             : {},
           isKiitStudent ? {} : { isOutsideParticipantAllowed: true },
+          { isApproved: true },
         ],
       },
       include: {
@@ -94,6 +100,9 @@ export class EventService {
             venue: true,
           },
         },
+      },
+      omit: {
+        transcript: role === 'PARTICIPANT' ? true : false,
       },
     });
 
@@ -182,13 +191,14 @@ export class EventService {
   }
 
   async getEventById(
-    participantId: string,
+    userId: string,
     role: string,
     eventId: string,
     isKiitStudent = true,
   ): Promise<IResponse<IEventById>> {
     let joined: boolean | undefined;
     let isFavorite: boolean | undefined;
+    let isLeader: boolean | undefined;
 
     const event = await this.prisma.event.findUnique({
       where: {
@@ -212,9 +222,12 @@ export class EventService {
           },
         },
       },
+      omit: {
+        transcript: role === 'PARTICIPANT' ? true : false,
+      },
     });
 
-    if (!event) {
+    if (!event || (!(event.societyId === userId) && !event.isApproved)) {
       throw new CustomError('event not found', 404);
     }
 
@@ -230,12 +243,12 @@ export class EventService {
             {
               OR: [
                 {
-                  leaderId: participantId,
+                  leaderId: userId,
                 },
                 {
                   members: {
                     some: {
-                      participantId,
+                      participantId: userId,
                     },
                   },
                 },
@@ -244,30 +257,25 @@ export class EventService {
           ],
         },
       });
+
       const favorite = await this.prisma.favoriteEvent.findUnique({
         where: {
           participantId_eventId: {
             eventId,
-            participantId,
+            participantId: userId,
           },
         },
       });
-      if (favorite) {
-        isFavorite = true;
-      } else {
-        isFavorite = false;
-      }
-      if (participation) {
-        joined = true;
-      } else {
-        joined = false;
-      }
+
+      isFavorite = favorite ? true : false;
+      joined = participation ? true : false;
+      isLeader = participation?.leaderId === userId ? true : false;
     }
 
     return {
       success: true,
       message: 'events fetched successfully',
-      data: { ...(event as IEventById), joined, isFavorite },
+      data: { ...(event as IEventById), joined, isFavorite, isLeader },
     };
   }
 
@@ -292,6 +300,8 @@ export class EventService {
       deadline,
       isOutsideParticipantAllowed,
       maxTeamSize,
+      transcript,
+      tags,
     } = dto;
     if (!images || images.length === 0) {
       throw new CustomError('images are required', 400);
@@ -319,6 +329,8 @@ export class EventService {
             key: imageData.key,
           })),
         },
+        tags,
+        transcript,
         maxTeamSize,
         isOutsideParticipantAllowed,
         details: {

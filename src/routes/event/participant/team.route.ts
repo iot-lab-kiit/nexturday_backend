@@ -31,9 +31,9 @@ export class ParticipantRoute {
       this.teamController.getAllJoinedEvents,
     );
     this.router.post('/team/create/:id', this.teamController.createTeam);
-    this.router.post('/team/join/:id', this.teamController.createTeam);
+    this.router.post('/team/join/:id', this.teamController.joinTeam);
     this.router.post(
-      '/team',
+      '/team/:id',
       this.TeamAuthMiddleware.verify,
       this.teamController.getTeamDetails,
     );

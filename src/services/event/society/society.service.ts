@@ -179,17 +179,6 @@ export class SocietyService {
       },
     });
 
-    const filteredTeams = teams.filter((team) => {
-      return team.members.some((member) => {
-        return (
-          member.participant.universityEmail === dto.q ||
-          member.participant.rollNo === dto.q ||
-          member.participant.detail?.firstname === dto.q ||
-          member.participant.detail?.lastname === dto.q
-        );
-      });
-    });
-
     return {
       success: true,
       message: 'participants fetched successfully',
@@ -198,7 +187,7 @@ export class SocietyService {
         nextPage,
         totalItems: totalTeams,
         totalPages,
-        data: filteredTeams,
+        data: teams,
       },
     };
   }

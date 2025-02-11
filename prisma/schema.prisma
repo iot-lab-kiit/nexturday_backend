@@ -55,6 +55,7 @@ model Society {
   websiteUrl  String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  role        Role     @default(SOCIETY)
   events      Event[]
 }
 
@@ -77,8 +78,10 @@ model Event {
   deadline                    DateTime
   maxTeamSize                 Int             @default(1)
   isOutsideParticipantAllowed Boolean         @default(false)
-  evenTags                    String[]
+  tags                        String[]
   teamCount                   Int             @default(0)
+  transcript                  String?
+  isApproved                  Boolean         @default(false)
   createdAt                   DateTime        @default(now())
   updatedAt                   DateTime        @updatedAt
   teams                       Team[]
@@ -153,4 +156,9 @@ model FavoriteEvent {
 enum EventType {
   ONLINE
   OFFLINE
+}
+
+enum Role {
+  ADMIN
+  SOCIETY
 }

@@ -1,7 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import { IAllEvents, IPaginatedData, IResponse } from '../../../interfaces';
+import {
+  IAllEvents,
+  IFavoriteEvents,
+  IPaginatedData,
+  IResponse,
+} from '../../../interfaces';
 import { SearchDto } from '../../../common/dtos';
 import { TAKE_PAGES } from '../../../common/constants';
+import { CustomError } from '../../../utils';
 
 export class FavoriteService {
   private prisma: PrismaClient;
@@ -14,6 +20,16 @@ export class FavoriteService {
     participantId: string,
     eventId: string,
   ): Promise<IResponse> {
+    const event = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+    });
+
+    if (!event || !event.isApproved) {
+      throw new CustomError('event not found', 404);
+    }
+
     await this.prisma.favoriteEvent.create({
       data: {
         eventId,
@@ -49,10 +65,13 @@ export class FavoriteService {
   async getAllFavoriteEvents(
     participantId: string,
     dto: SearchDto,
-  ): Promise<IResponse<IPaginatedData<IAllEvents>>> {
+  ): Promise<IResponse<IPaginatedData<IFavoriteEvents>>> {
     const totalFavoriteEvents = await this.prisma.favoriteEvent.count({
       where: {
         participantId,
+        event: {
+          isApproved: true,
+        },
       },
     });
     const totalPages = Math.ceil(totalFavoriteEvents / TAKE_PAGES);
@@ -83,10 +102,12 @@ export class FavoriteService {
               OR: [
                 { name: { search: dto.q } },
                 { about: { search: dto.q } },
+                { tags: { has: dto.q } },
                 { society: { name: { search: dto.q } } },
               ],
             }
           : undefined),
+        isApproved: true,
       },
       include: {
         society: {
@@ -105,6 +126,9 @@ export class FavoriteService {
             venue: true,
           },
         },
+      },
+      omit: {
+        transcript: true,
       },
     });
 

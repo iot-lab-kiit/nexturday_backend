@@ -5,3 +5,4 @@ export * from './event.type';
 export * from './crousel.interface';
 export * from './image.interface';
 export * from './participant';
+export * from './favoriteEvents.interface';

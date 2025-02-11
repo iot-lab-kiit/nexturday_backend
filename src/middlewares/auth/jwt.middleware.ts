@@ -39,7 +39,7 @@ export class JWTMiddleware {
         email: user.email,
         name: user.name,
         sub: user.sub,
-        role: 'SOCIETY',
+        role: society.role,
         image: user?.image,
       };
       if (this.handleError) {

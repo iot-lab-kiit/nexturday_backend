@@ -189,7 +189,7 @@ export class TeamService {
         id: eventId,
       },
     });
-    if (!event) {
+    if (!event || !event.isApproved) {
       throw new CustomError('event not found', 404);
     }
     if ((event.deadline as Date).getTime() < Date.now()) {
@@ -272,7 +272,7 @@ export class TeamService {
         event: true,
       },
     });
-    if (!team?.event) {
+    if (!team?.event || !team.event.isApproved) {
       throw new CustomError('event not found', 404);
     }
     if (!team) {
@@ -310,6 +310,9 @@ export class TeamService {
     const team = await this.prisma.team.findUnique({
       where: {
         id: teamId,
+        event: {
+          isApproved: true,
+        },
       },
       include: {
         leader: {

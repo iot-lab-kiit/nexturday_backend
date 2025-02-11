@@ -72,7 +72,7 @@ export class TeamController {
     try {
       const participantId = (req.user as IUser).sub;
       const teamId = req.params.id;
-      const result = await this.teamService.createTeam(participantId, teamId);
+      const result = await this.teamService.joinTeam(participantId, teamId);
       res.status(201).json(result);
     } catch (error) {
       next(error);

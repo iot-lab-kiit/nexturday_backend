@@ -9,6 +9,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUrl,
   Min,
   ValidateIf,
   ValidateNested,
@@ -93,6 +94,16 @@ export class EventDto {
   @IsNotEmpty()
   @IsArray()
   @ArrayNotEmpty()
+  @IsString({ each: true })
+  tags: string[];
+
+  @IsOptional()
+  @IsUrl()
+  transcript?: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => EventDetailDto)
   @IsWithinRange({ from: 'from', to: 'to' })
@@ -104,6 +115,12 @@ export class EventDto {
   maxTeamSize?: number;
 
   @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      if (value === 'true') return true;
+      else return false;
+    } else return value;
+  })
   @IsBoolean()
   isOutsideParticipantAllowed?: boolean;
 
@@ -118,6 +135,12 @@ export class EventDto {
         (payload?.paid as unknown as string).toLowerCase() === 'true'
           ? true
           : false;
+      payload.isOutsideParticipantAllowed &&
+      (
+        payload?.isOutsideParticipantAllowed as unknown as string
+      ).toLowerCase() === 'true'
+        ? true
+        : false;
       if (!paid) {
         delete payload?.registrationUrl;
         delete payload?.price;
