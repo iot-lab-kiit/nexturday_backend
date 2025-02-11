@@ -38,6 +38,7 @@ export class SocietyService {
       sub: society.id,
       email: society.email,
       name: society.name,
+      role: society.role,
     };
     const token = this.jwtToken(payload);
 

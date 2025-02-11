@@ -7,11 +7,13 @@ import {
   JWTMiddleware,
   NotFoundMiddleware,
   PrismaErrorMiddleware,
+  RoleMiddleware,
 } from '../middlewares';
 import { ParticipantRoute } from './participant';
 import { EventRoute } from './event';
 import { AuthRoute } from './auth';
 import { SocietyRoute } from './society';
+import { AdminRoute } from './admin';
 
 export class Routes {
   private homeRoute: HomeRoute;
@@ -21,6 +23,7 @@ export class Routes {
   private authRoute: AuthRoute;
   private eventRoute: EventRoute;
   private societyRoute: SocietyRoute;
+  private adminRoute: AdminRoute;
   private jwtMiddlware: JWTMiddleware;
 
   constructor(private app: Application) {
@@ -31,6 +34,7 @@ export class Routes {
     this.authRoute = new AuthRoute();
     this.eventRoute = new EventRoute();
     this.societyRoute = new SocietyRoute();
+    this.adminRoute = new AdminRoute();
     this.jwtMiddlware = new JWTMiddleware();
 
     this.app.use('/api', this.homeRoute.router);
@@ -50,6 +54,12 @@ export class Routes {
       this.eventRoute.router,
     );
     this.app.use('/api/auth', this.authRoute.router);
+    this.app.use(
+      '/api/admin',
+      this.jwtMiddlware.verify,
+      new RoleMiddleware('ADMIN').verify,
+      this.adminRoute.router,
+    );
     this.app.use(NotFoundMiddleware.handle);
     this.app.use(PrismaErrorMiddleware.handle);
     this.app.use(GlobalErrorMiddleware.handle);
