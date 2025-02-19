@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { VerifyTokenService } from '../../../services/auth/participant';
 import { CustomError, MethodBinder } from '../../../utils';
 import { FirebaseAuthError } from 'firebase-admin/auth';
+import { plainToInstance } from 'class-transformer';
+import { VerifyTokenDto } from '../../../common/dtos/auth/participant';
 
 export class VerifyTokenController {
   private verifyTokenService: VerifyTokenService;
@@ -22,7 +24,8 @@ export class VerifyTokenController {
         throw new CustomError('Authorization token is required', 401);
       }
       const token = req.headers.authorization?.split(' ')[1] as string;
-      const result = await this.verifyTokenService.verifyToken(token);
+      const dto = plainToInstance(VerifyTokenDto, req.query);
+      const result = await this.verifyTokenService.verifyToken(token, dto);
       res.status(200).json(result);
     } catch (error) {
       if (error instanceof FirebaseAuthError) {

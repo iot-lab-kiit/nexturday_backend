@@ -14,7 +14,7 @@ export class ParticipantService {
   }
 
   async createParticipant(dto: CreateParticipantDto): Promise<void> {
-    const { isKiitStudent, universityEmail, uid, imageUrl } = dto;
+    const { isKiitStudent, universityEmail, uid, imageUrl, fcmToken } = dto;
 
     const society = await this.prisma.society.findFirst({
       where: {
@@ -34,6 +34,7 @@ export class ParticipantService {
         rollNo,
         imageUrl,
         uid,
+        fcmToken,
       },
     });
   }

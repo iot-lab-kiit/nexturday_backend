@@ -4,6 +4,8 @@ import { getAuth } from 'firebase-admin/auth';
 import { CustomError } from '../../../utils';
 import { ParticipantService } from '../../participant';
 import { IResponse } from '../../../interfaces';
+import { getMessaging } from 'firebase-admin/messaging';
+import { VerifyTokenDto } from '../../../common/dtos/auth/participant';
 
 export class VerifyTokenService {
   private prisma: PrismaClient;
@@ -16,10 +18,30 @@ export class VerifyTokenService {
     this.participantService = new ParticipantService();
   }
 
-  async verifyToken(token: string): Promise<IResponse> {
+  async verifyToken(token: string, dto: VerifyTokenDto): Promise<IResponse> {
     const user = await getAuth(this.firebaseProvider.firebase).verifyIdToken(
       token,
     );
+
+    try {
+      if (dto.fcmToken) {
+        await getMessaging().send(
+          {
+            token: dto.fcmToken,
+            notification: {
+              title: 'Test',
+              body: 'Checking token validity',
+            },
+            android: {
+              priority: 'high',
+            },
+          },
+          true,
+        );
+      }
+    } catch (error) {
+      throw new CustomError('fcm token invalid', 401);
+    }
 
     if (!user.email?.endsWith('@kiit.ac.in')) {
       throw new CustomError('kiit email allowed', 401);
@@ -37,6 +59,16 @@ export class VerifyTokenService {
         isKiitStudent: email.endsWith('@kiit.ac.in') ? true : false,
         uid: user.uid,
         imageUrl: user.picture,
+        fcmToken: dto.fcmToken,
+      });
+    } else {
+      await this.prisma.participant.update({
+        where: {
+          id: participant.id,
+        },
+        data: {
+          fcmToken: dto.fcmToken,
+        },
       });
     }
 

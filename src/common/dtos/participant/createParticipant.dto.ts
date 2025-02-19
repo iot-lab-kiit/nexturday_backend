@@ -3,4 +3,5 @@ export class CreateParticipantDto {
   universityEmail: string;
   isKiitStudent: boolean;
   imageUrl?: string;
+  fcmToken?: string;
 }
