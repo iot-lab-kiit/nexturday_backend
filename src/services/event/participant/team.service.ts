@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import {
   IAllEvents,
+  ICreateTeam,
   IPaginatedData,
   IResponse,
   ITeam,
@@ -172,7 +173,10 @@ export class TeamService {
     };
   }
 
-  async createTeam(participantId: string, eventId: string): Promise<IResponse> {
+  async createTeam(
+    participantId: string,
+    eventId: string,
+  ): Promise<IResponse<ICreateTeam>> {
     const participant = await this.prisma.participant.findUnique({
       where: {
         id: participantId,
@@ -222,9 +226,12 @@ export class TeamService {
       },
     });
     if (registered) {
-      throw new CustomError('event already joined', 400);
+      throw new CustomError(
+        `event already joined with teamId: ${registered.id}`,
+        400,
+      );
     }
-    await this.prisma.team.create({
+    const team = await this.prisma.team.create({
       data: {
         eventId,
         leaderId: participantId,
@@ -245,6 +252,7 @@ export class TeamService {
     return {
       success: true,
       message: 'team created successfully',
+      data: team,
     };
   }
 
