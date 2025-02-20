@@ -38,7 +38,7 @@ export class EventRoute {
     );
     this.router.use(
       '/society',
-      new RoleMiddleware('SOCIETY').verify,
+      new RoleMiddleware('SOCIETY','ADMIN').verify,
       this.societyRoute.router,
     );
     this.router.get(

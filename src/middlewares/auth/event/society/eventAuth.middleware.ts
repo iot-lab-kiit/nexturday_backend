@@ -18,6 +18,9 @@ export class EventAuthMiddleware {
     try {
       const societyId = (req.user as IParticipant).sub;
       const eventId = req.params.id;
+      if (req.user?.role === 'ADMIN') {
+        next();
+      }
       const event = await this.prisma.event.findUnique({
         where: {
           id: eventId,
