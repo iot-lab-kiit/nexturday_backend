@@ -206,6 +206,7 @@ export class TeamService {
     }
     const registered = await this.prisma.team.findFirst({
       where: {
+        eventId,
         OR: [
           {
             leaderId: participantId,
