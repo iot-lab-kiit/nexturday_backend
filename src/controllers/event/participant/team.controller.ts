@@ -79,6 +79,21 @@ export class TeamController {
     }
   }
 
+  async getTeamId(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const eventId = req.params.id;
+      const participantId = (req.user as IUser).sub;
+      const result = await this.teamService.getTeamId(participantId, eventId);
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getTeamDetails(
     req: Request,
     res: Response,

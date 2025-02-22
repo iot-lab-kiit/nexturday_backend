@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import {
   IAllEvents,
   ICreateTeam,
+  IGetTeamId,
   IPaginatedData,
   IResponse,
   ITeam,
@@ -312,6 +313,39 @@ export class TeamService {
     return {
       success: true,
       message: 'team joined successfully',
+    };
+  }
+
+  async getTeamId(
+    participantId: string,
+    eventId: string,
+  ): Promise<IResponse<IGetTeamId>> {
+    const team = await this.prisma.team.findFirst({
+      where: {
+        eventId,
+        OR: [
+          { leaderId: participantId },
+          {
+            members: {
+              some: {
+                participantId,
+              },
+            },
+          },
+        ],
+      },
+    });
+
+    if (!team) {
+      throw new CustomError('event not joined', 400);
+    }
+
+    return {
+      success: true,
+      message: 'teamId fetched successfully',
+      data: {
+        teamId: team.id,
+      },
     };
   }
 

@@ -32,10 +32,11 @@ export class ParticipantRoute {
     );
     this.router.post('/team/create/:id', this.teamController.createTeam);
     this.router.post('/team/join/:id', this.teamController.joinTeam);
-    this.router.post(
+    this.router.get(
       '/team/:id',
       this.TeamAuthMiddleware.verify,
       this.teamController.getTeamDetails,
     );
+    this.router.get('/teamId/:id', this.teamController.getTeamId);
   }
 }
