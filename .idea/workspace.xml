@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6d5b556-3e2c-43de-b9af-94e79e5fa3bd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/auth/society/society.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/auth/society/society.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/event/participant/team.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/event/participant/team.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/event/participant/team.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/event/participant/team.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +35,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/iot-lab-kiit/nexturday_backend.git&quot;,
-    &quot;accountId&quot;: &quot;2284c233-b0e0-48e3-b016-101b27136497&quot;
+    &quot;accountId&quot;: &quot;09e4816a-10c8-4ed6-b200-85955b1ded9e&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -49,13 +51,14 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/dibyajyotidey/WebstormProjects/raiders_reckoning_backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/dibyajyotidey/WebstormProjects/nexturday_backend/node_modules/typescript/lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;H:\\webdev\\nexturday_backend\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -71,7 +74,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17890.13" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-WS-242.21829.149" />
       </set>
     </attachedChunks>
   </component>
@@ -99,6 +102,8 @@
       <workItem from="1738153884394" duration="607000" />
       <workItem from="1738230688064" duration="4000" />
       <workItem from="1738349935663" duration="300000" />
+      <workItem from="1740316953452" duration="473000" />
+      <workItem from="1740317445327" duration="282000" />
     </task>
     <servers />
   </component>

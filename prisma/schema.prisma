@@ -125,6 +125,7 @@ model Venue {
 
 model Team {
   id        String       @id @default(uuid())
+  name      String
   leaderId  String
   leader    Participant  @relation(fields: [leaderId], references: [id], onDelete: Cascade)
   eventId   String

@@ -57,7 +57,11 @@ export class TeamController {
     try {
       const participantId = (req.user as IUser).sub;
       const eventId = req.params.id;
-      const result = await this.teamService.createTeam(participantId, eventId);
+      const teamName: string = req.body.teamName;
+      if (!teamName) {
+        throw new Error('team name is required');
+      }
+      const result = await this.teamService.createTeam(participantId, eventId, teamName);
       res.status(201).json(result);
     } catch (error) {
       next(error);
