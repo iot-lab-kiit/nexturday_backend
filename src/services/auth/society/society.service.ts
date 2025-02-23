@@ -51,7 +51,7 @@ export class SocietyService {
     };
   }
 
-  async signup(dto: SignupDto): Promise<IResponse> {
+  async signup(dto: SignupDto): Promise<IResponse<ILogin>> {
     const { email, password, name, phoneNumber, websiteUrl } = dto;
 
     const society = await this.prisma.society.findUnique({
@@ -70,7 +70,7 @@ export class SocietyService {
 
     const hashedPassword = await this.bcryptService.hashPassword(password);
 
-    await this.prisma.society.create({
+    const createdSociety = await this.prisma.society.create({
       data: {
         email,
         password: hashedPassword,
@@ -80,9 +80,20 @@ export class SocietyService {
       },
     });
 
+    const payload: IPayload = {
+      sub: createdSociety.id,
+      email: createdSociety.email,
+      name: createdSociety.name,
+      role: createdSociety.role,
+    };
+    const token = this.jwtToken(payload);
+
     return {
       success: true,
       message: 'SignedUp successfully',
+      data: {
+        accessToken: token,
+      },
     };
   }
 

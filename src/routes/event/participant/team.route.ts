@@ -31,6 +31,7 @@ export class ParticipantRoute {
       this.teamController.getAllJoinedEvents,
     );
     this.router.post('/team/create/:id', this.teamController.createTeam);
+    this.router.post('/team/updateName/:teamId', this.teamController.updateTeamName);
     this.router.post('/team/join/:id', this.teamController.joinTeam);
     this.router.get(
       '/team/:id',

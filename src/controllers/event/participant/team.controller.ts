@@ -49,6 +49,24 @@ export class TeamController {
     }
   }
 
+
+  async updateTeamName(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const participantId = (req.user as IUser).sub;
+      const teamId = req.params.teamId;
+      const teamName: string = req.body.teamName;
+      const result = await this.teamService.updateTeamName(participantId,teamId, teamName);
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
   async createTeam(
     req: Request,
     res: Response,
@@ -58,9 +76,9 @@ export class TeamController {
       const participantId = (req.user as IUser).sub;
       const eventId = req.params.id;
       const teamName: string = req.body.teamName;
-      if (!teamName) {
-        throw new Error('team name is required');
-      }
+      // if (!teamName) {
+      //   throw new Error('team name is required');
+      // }
       const result = await this.teamService.createTeam(participantId, eventId, teamName);
       res.status(201).json(result);
     } catch (error) {

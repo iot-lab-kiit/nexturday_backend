@@ -174,6 +174,39 @@ export class TeamService {
         };
     }
 
+
+    async updateTeamName(
+        participantId: string,
+        teamId: string,
+        teamName: string,
+    ): Promise<IResponse> {
+        const team = await this.prisma.team.findUnique({
+            where: {
+                id: teamId,
+            },
+        });
+        if (!team) {
+            throw new CustomError('team not found', 404);
+        }
+        if (team.leaderId !== participantId) {
+            throw new CustomError('not authorized', 401);
+        }
+        await this.prisma.team.update({
+            where: {
+                id: teamId,
+            },
+            data: {
+                name: teamName,
+            },
+        });
+
+        return {
+            success: true,
+            message: 'team name updated successfully',
+        };
+    }
+
+
     async createTeam(
         participantId: string,
         eventId: string,
@@ -232,6 +265,9 @@ export class TeamService {
                 `event already joined with teamId: ${registered.id}`,
                 400,
             );
+        }
+        if (!teamName) {
+            teamName = participant.detail.firstname + ' ' + participant.detail.lastname;
         }
         const team = await this.prisma.team.create({
             data: {
