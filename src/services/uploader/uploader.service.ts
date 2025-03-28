@@ -1,11 +1,12 @@
 import { IFile, IImageData } from '../../interfaces';
-import { S3BucketService } from '../../libs/s3-bucket';
+import { CloudinaryService } from '../../libs/cloudinary/cloudinary.service';
+
 
 export class UploaderService {
-  private s3BucketService: S3BucketService;
+  private s3BucketService: CloudinaryService;
 
   constructor() {
-    this.s3BucketService = new S3BucketService();
+    this.s3BucketService = new CloudinaryService();
   }
 
   async uploadSingle(file: Express.Multer.File): Promise<IImageData> {
