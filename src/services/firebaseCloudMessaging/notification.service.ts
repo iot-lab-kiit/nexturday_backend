@@ -25,6 +25,7 @@ export class NotificationService {
       },
     };
 
+
     try {
       const response = await admin.messaging().sendEachForMulticast({
         tokens: tokens,
@@ -33,6 +34,17 @@ export class NotificationService {
       console.log('Successfully sent message:', response);
     } catch (error) {
       console.error('Error sending message:', error);
+    }
+    if (all){
+      try {
+        const response= await admin.messaging().send({
+          topic: 'all',
+          notification: payload.notification,
+        });
+        console.log('Successfully sent message topic: all:', response);
+      } catch (err) {
+        console.error('Error sending message all:', err);
+      }
     }
   }
 
