@@ -29,14 +29,14 @@ export class VerifyTokenService {
           {
             token: dto.fcmToken,
             notification: {
-              title: 'Test',
-              body: 'Checking token validity',
+              title: 'Successfully Logged In',
+              body: 'You have successfully logged in to the app',
             },
             android: {
               priority: 'high',
             },
           },
-          true,
+          // true,
         );
       }
     } catch (error) {

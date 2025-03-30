@@ -13,14 +13,17 @@ import { CROUSEL, TAKE_PAGES, TOTAL_IMAGES } from '../../common/constants';
 import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
 import { UploaderService } from '../uploader';
 import { CustomError } from '../../utils';
+import { NotificationService } from '../firebaseCloudMessaging';
 
 export class EventService {
   private prisma: PrismaClient;
   private uploaderService: UploaderService;
+  private notificationService: NotificationService;
 
   constructor() {
     this.prisma = new PrismaClient();
     this.uploaderService = new UploaderService();
+    this.notificationService = new NotificationService();
   }
 
   async getAllEvents(
@@ -352,6 +355,15 @@ export class EventService {
         },
       },
     });
+    //send a notification to all participants
+
+    this.notificationService
+      .sendNotification(
+        'New Upcoming Event',
+        `A new event ${name} has been created`,
+        true,
+      )
+      .catch((e) => console.log(e));
 
     return {
       success: true,
