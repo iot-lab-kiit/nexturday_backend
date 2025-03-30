@@ -15,6 +15,6 @@ export class VerifyTokenRoute {
   }
 
   private initializeRoutes() {
-    this.router.post('/', this.verifyTokenController.verifyToken);
+    this.router.get('/', this.verifyTokenController.verifyToken);
   }
 }
