@@ -22,6 +22,7 @@ export class VerifyTokenService {
     const user = await getAuth(this.firebaseProvider.firebase).verifyIdToken(
       token,
     );
+    console.log("FCM TOKEN: ",dto.fcmToken);
     try {
       if (dto.fcmToken) {
         await getMessaging().send(
