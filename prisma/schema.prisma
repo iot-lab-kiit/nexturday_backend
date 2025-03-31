@@ -64,6 +64,7 @@ model Event {
   id                          String          @id @default(uuid())
   paid                        Boolean
   images                      Image[]
+  paymentQrUrl                String?
   name                        String
   society                     Society         @relation(fields: [societyId], references: [id], onDelete: Cascade)
   societyId                   String
@@ -124,15 +125,23 @@ model Venue {
 }
 
 model Team {
-  id        String       @id @default(uuid())
-  name      String
-  leaderId  String
-  leader    Participant  @relation(fields: [leaderId], references: [id], onDelete: Cascade)
-  eventId   String
-  event     Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  members   TeamMember[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id             String        @id @default(uuid())
+  name           String
+  leaderId       String
+  leader         Participant   @relation(fields: [leaderId], references: [id], onDelete: Cascade)
+  eventId        String
+  event          Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  members        TeamMember[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  payment_status PaymentStatus @default(UNPAID)
+  paymentId      String?
+}
+
+enum PaymentStatus {
+  UNPAID
+  UNDER_VERIFICATION
+  VERIFIED
 }
 
 model TeamMember {

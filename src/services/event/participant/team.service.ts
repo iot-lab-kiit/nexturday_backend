@@ -1,4 +1,4 @@
-import {PrismaClient} from '@prisma/client';
+import { PaymentStatus, PrismaClient } from '@prisma/client';
 import {
     IAllEvents,
     ICreateTeam,
@@ -18,66 +18,56 @@ export class TeamService {
         this.prisma = new PrismaClient();
     }
 
-    // async joinEvent(participantId: string, eventId: string): Promise<IResponse> {
-    //   const participantDetail = await this.prisma.participantDetail.findUnique({
-    //     where: {
-    //       participantId,
-    //     },
-    //   });
-    //   if (!participantDetail) {
-    //     throw new CustomError('participant details not found', 404);
-    //   }
-    //   const event = await this.prisma.event.findUnique({
-    //     where: {
-    //       id: eventId,
-    //     },
-    //   });
-    //   if (!event) {
-    //     throw new CustomError('event not found', 404);
-    //   }
-    //   if ((event.deadline as Date).getTime() < Date.now()) {
-    //     throw new CustomError('registration deadline over', 400);
-    //   }
-    //   if ((event?.to as Date).getTime() < Date.now()) {
-    //     throw new CustomError('event finished', 400);
-    //   }
-    //   if (event?.paid === true) {
-    //     throw new CustomError('paid event', 400);
-    //   }
-    //   const registered = await this.prisma.eventParticipant.findUnique({
-    //     where: {
-    //       participantId_eventId: {
-    //         eventId,
-    //         participantId,
-    //       },
-    //     },
-    //   });
-    //   if (registered) {
-    //     throw new CustomError('event already joined', 400);
-    //   }
-    //   await this.prisma.eventParticipant.create({
-    //     data: {
-    //       eventId,
-    //       participantId,
-    //     },
-    //   });
 
-    //   await this.prisma.event.update({
-    //     where: {
-    //       id: eventId,
-    //     },
-    //     data: {
-    //       participationCount: {
-    //         increment: 1,
-    //       },
-    //     },
-    //   });
 
-    //   return {
-    //     success: true,
-    //     message: 'event joined successfully',
-    //   };
-    // }
+
+    async leaveTeam(teamId: string, userId: string, memberId?: string): Promise<{ success: boolean; message: string }> {
+        const team = await this.prisma.team.findUnique({
+            where: { id: teamId },
+            include: { members: true, event: true },
+        });
+
+        if (!team) {
+            throw new Error('Team not found');
+        }
+
+        const isLeader = team.leaderId === userId;
+
+        if (isLeader && memberId) {
+            await this.prisma.teamMember.delete({
+                where: {
+                    teamId_participantId: {
+                        teamId: teamId,
+                        participantId: memberId,
+                    },
+                },
+            });
+            return { success: true, message: 'Member kicked successfully' };
+        } else if (isLeader) {
+            await this.prisma.team.delete({
+                where: { id: teamId },
+            });
+            await this.prisma.event.update({
+                where: { id: team.eventId },
+                data: {
+                    teamCount: {
+                        decrement: 1,
+                    },
+                },
+            });
+            return { success: true, message: 'Team deleted as leader left' };
+        } else {
+            await this.prisma.teamMember.delete({
+                where: {
+                    teamId_participantId: {
+                        teamId: teamId,
+                        participantId: userId,
+                    },
+                },
+            });
+            return { success: true, message: 'Left the team successfully' };
+        }
+    }
 
     async getAllJoinedEvents(
         participantId: string,
@@ -171,6 +161,42 @@ export class TeamService {
                 totalPages,
                 data: events,
             },
+        };
+    }
+
+    async updatePaymentId(
+      participantId: string,
+      teamId: string,
+      paymentId: string,
+    ): Promise<IResponse> {
+        const team = await this.prisma.team.findUnique({
+            where: { id: teamId },
+        });
+
+        if (!team) {
+            throw new CustomError('Team not found', 404);
+        }
+        if (team.leaderId !== participantId) {
+            throw new CustomError('Unauthorized, Not team leader', 401);
+        }
+        if (team.payment_status === PaymentStatus.VERIFIED) {
+            return {
+                success: true,
+                message: 'Payment already verified',
+            };
+        }
+
+        await this.prisma.team.update({
+            where: { id: teamId },
+            data: {
+                payment_status: PaymentStatus.UNDER_VERIFICATION,
+                paymentId: paymentId,
+            },
+        });
+
+        return {
+            success: true,
+            message: 'Payment ID updated and status set to UNDER_VERIFICATION',
         };
     }
 

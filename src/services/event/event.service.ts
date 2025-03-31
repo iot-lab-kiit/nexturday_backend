@@ -285,6 +285,7 @@ export class EventService {
   async createEvent(
     dto: EventDto,
     images?: Express.Multer.File[],
+    paymentQr?: Express.Multer.File[]
   ): Promise<IResponse> {
     const {
       emails,
@@ -310,7 +311,11 @@ export class EventService {
       throw new CustomError('images are required', 400);
     }
     const imagesData = await this.uploaderService.uploadMultiple(images);
+    let paymentQrData;
 
+    if (paymentQr && paymentQr.length > 0) {
+      paymentQrData = await this.uploaderService.uploadSingle(paymentQr[0]);
+    }
     await this.prisma.event.create({
       data: {
         about,
@@ -332,6 +337,9 @@ export class EventService {
             key: imageData.key,
           })),
         },
+        ...(paymentQrData && {
+          paymentQrUrl: paymentQrData.url,
+        }),
         tags,
         transcript,
         maxTeamSize,
@@ -374,6 +382,7 @@ export class EventService {
   async updateEvent(
     dto: UpdateEventDto,
     images?: Express.Multer.File[],
+    paymentQr?: Express.Multer.File[]
   ): Promise<IResponse> {
     const {
       emails,
@@ -452,6 +461,11 @@ export class EventService {
       });
     }
 
+    let paymentQrData;
+    if (paymentQr && paymentQr.length > 0) {
+      paymentQrData = await this.uploaderService.uploadSingle(paymentQr[0]);
+    }
+
     await this.prisma.eventDetail.deleteMany({
       where: {
         eventId,
@@ -483,6 +497,9 @@ export class EventService {
               })),
             },
           }),
+        ...(paymentQrData && {
+          paymentQrUrl: paymentQrData.url,
+        }),
         details: {
           create: details.map((detail) => ({
             name: detail.name,

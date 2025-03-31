@@ -63,8 +63,9 @@ export class EventController {
         societyId,
         ...(req.body as Object),
       });
-      const images = req.files as Express.Multer.File[] | undefined;
-      const result = await this.eventService.createEvent(dto, images);
+      const images = (req.files as { [fieldname: string]: Express.Multer.File[] })['images'];
+      const paymentQr = (req.files as { [fieldname: string]: Express.Multer.File[] })['paymentQr'];
+      const result = await this.eventService.createEvent(dto, images, paymentQr);
       res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -82,8 +83,9 @@ export class EventController {
         eventId,
         ...(req.body as Object),
       });
-      const images = req.files as Express.Multer.File[] | undefined;
-      const result = await this.eventService.updateEvent(dto, images);
+      const images = (req.files as { [fieldname: string]: Express.Multer.File[] })['images'];
+      const paymentQr = (req.files as { [fieldname: string]: Express.Multer.File[] })['paymentQr'];
+      const result = await this.eventService.updateEvent(dto, images, paymentQr);
       res.status(201).json(result);
     } catch (error) {
       next(error);

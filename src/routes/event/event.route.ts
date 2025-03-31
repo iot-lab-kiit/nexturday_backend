@@ -51,14 +51,20 @@ export class EventRoute {
     this.router.use(new RoleMiddleware('SOCIETY').verify);
     this.router.post(
       '/',
-      this.uploaderMiddleware.uploader.array('images', TOTAL_IMAGES),
+      this.uploaderMiddleware.uploader.fields([
+        { name: 'images', maxCount: TOTAL_IMAGES },
+        { name: 'paymentQr', maxCount: 1 },
+      ]),
       new ValidationMiddleware([EventDto, 'body']).validate,
       this.eventController.createEvent,
     );
     this.router.patch(
       '/:id',
       this.eventAuthMiddleware.verify,
-      this.uploaderMiddleware.uploader.array('images', TOTAL_IMAGES),
+      this.uploaderMiddleware.uploader.fields([
+        { name: 'images', maxCount: TOTAL_IMAGES },
+        { name: 'paymentQr', maxCount: 1 },
+      ]),
       new ValidationMiddleware([UpdateEventDto, 'body']).validate,
       this.eventController.updateEvent,
     );

@@ -39,6 +39,10 @@ export class EventDto {
   @IsString({ each: true })
   emails: string[];
 
+  @IsOptional()
+  @IsUrl()
+  paymentQrUrl?: string;
+
   @IsNotEmpty()
   @IsArray()
   @ArrayNotEmpty()
@@ -146,6 +150,9 @@ export class EventDto {
         delete payload?.price;
       }
       payload = { ...payload, details, paid } as EventDto;
+    }
+    if (payload?.paymentQrUrl) {
+      this.paymentQrUrl = payload.paymentQrUrl;
     }
     Object.assign(this, payload);
   }

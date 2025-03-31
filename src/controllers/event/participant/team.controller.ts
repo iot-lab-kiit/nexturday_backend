@@ -31,6 +31,34 @@ export class TeamController {
   //   }
   // }
 
+  async leaveTeam(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const teamId = req.params.teamId;
+      const userId = req.user?.sub as string;
+      const memberId = req.body.memberId as string | undefined;
+      const result = await this.teamService.leaveTeam(teamId, userId, memberId);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updatePaymentId(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const participantId = (req.user as IUser).sub;
+      const teamId = req.params.teamId;
+      const paymentId: string = req.body.paymentId;
+      const result = await this.teamService.updatePaymentId(participantId, teamId, paymentId);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getAllJoinedEvents(
     req: Request,
     res: Response,
