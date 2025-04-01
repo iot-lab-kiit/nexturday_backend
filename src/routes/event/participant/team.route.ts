@@ -48,7 +48,7 @@ export class ParticipantRoute {
       this.teamController.getTeamDetails,
     );
     this.router.get(
-      '/team/paymentStatus/:id',
+      '/team/paymentStatus/:teamId',
       this.TeamAuthMiddleware.verify,
       this.teamController.getPaymentStatus,
     );
