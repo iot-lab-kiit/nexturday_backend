@@ -263,9 +263,9 @@ export class TeamService {
         if ((event?.to as Date).getTime() < Date.now()) {
             throw new CustomError('event finished', 400);
         }
-        if (event?.paid === true) {
-            throw new CustomError('paid event', 400);
-        }
+        // if (event?.paid === true) {
+        //     throw new CustomError('paid event', 400);
+        // }
         if (!event.isOutsideParticipantAllowed && !participant.isKiitStudent) {
             throw new CustomError('event allowed for kiit students only', 400);
         }

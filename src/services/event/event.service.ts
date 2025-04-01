@@ -397,6 +397,7 @@ export class EventService {
       websiteUrl,
       about,
       details,
+      maxTeamSize,
       imagesKeys,
       eventId,
     } = dto;
@@ -487,6 +488,7 @@ export class EventService {
         websiteUrl,
         phoneNumbers,
         price,
+        maxTeamSize,
         registrationUrl,
         ...(images &&
           images.length > 0 && {
