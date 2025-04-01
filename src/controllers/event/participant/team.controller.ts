@@ -59,6 +59,20 @@ export class TeamController {
     }
   }
 
+  async getPaymentStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const teamId = req.params.teamId;
+      const result = await this.teamService.getPaymentStatus(teamId);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getAllJoinedEvents(
     req: Request,
     res: Response,

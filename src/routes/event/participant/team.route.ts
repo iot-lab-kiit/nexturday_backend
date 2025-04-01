@@ -31,14 +31,26 @@ export class ParticipantRoute {
       this.teamController.getAllJoinedEvents,
     );
     this.router.post('/team/create/:id', this.teamController.createTeam);
-    this.router.post('/team/updateName/:teamId', this.teamController.updateTeamName);
-    this.router.post('/team/updatePayment/:teamId', this.teamController.updatePaymentId);
+    this.router.post(
+      '/team/updateName/:teamId',
+      this.teamController.updateTeamName,
+    );
+    this.router.post(
+      '/team/updatePayment/:teamId',
+      this.teamController.updatePaymentId,
+    );
+
     this.router.post('/team/join/:id', this.teamController.joinTeam);
     this.router.post('/team/leave/:teamId', this.teamController.leaveTeam);
     this.router.get(
       '/team/:id',
       this.TeamAuthMiddleware.verify,
       this.teamController.getTeamDetails,
+    );
+    this.router.get(
+      '/team/paymentStatus/:id',
+      this.TeamAuthMiddleware.verify,
+      this.teamController.getPaymentStatus,
     );
     this.router.get('/teamId/:id', this.teamController.getTeamId);
   }

@@ -164,6 +164,27 @@ export class TeamService {
         };
     }
 
+    async getPaymentStatus(
+        teamId: string,
+    ): Promise<IResponse<{ payment_status: PaymentStatus }>> {
+        const team = await this.prisma.team.findUnique({
+            where: { id: teamId },
+            select: { payment_status: true }
+        });
+
+        if (!team) {
+            throw new CustomError('Team not found', 404);
+        }
+
+        return {
+            success: true,
+            message: 'Payment status fetched successfully',
+            data: {
+                payment_status: team.payment_status,
+            },
+        };
+    }
+
     async updatePaymentId(
       participantId: string,
       teamId: string,
@@ -183,6 +204,7 @@ export class TeamService {
             return {
                 success: true,
                 message: 'Payment already verified',
+
             };
         }
 
