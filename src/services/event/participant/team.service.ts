@@ -358,9 +358,9 @@ export class TeamService {
         if ((team.event?.to as Date).getTime() < Date.now()) {
             throw new CustomError('event finished', 400);
         }
-        if (team.event?.paid === true) {
-            throw new CustomError('paid event', 400);
-        }
+        // if (team.event?.paid === true) {
+        //     throw new CustomError('paid event', 400);
+        // }
         if (team.event.maxTeamSize === team._count.members + 1) {
             throw new CustomError('team already full', 400);
         }
