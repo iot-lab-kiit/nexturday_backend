@@ -34,15 +34,15 @@ export class UpdateParticipantDetailDto {
   @IsNotEmpty()
   @IsString()
   @Matches(/^\d+$/)
-  @MinLength(10)
-  @MaxLength(10)
+  @MinLength(9)
+  @MaxLength(15)
   phoneNumber: string;
 
   @IsNotEmpty()
   @IsString()
   @Matches(/^\d+$/)
-  @MinLength(10)
-  @MaxLength(10)
+  @MinLength(9)
+  @MaxLength(15)
   whatsappNumber: string;
 
   @IsNotEmpty()

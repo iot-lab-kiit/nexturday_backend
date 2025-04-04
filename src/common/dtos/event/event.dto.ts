@@ -115,7 +115,7 @@ export class EventDto {
 
   @IsOptional()
   @IsInt()
-  @Min(2)
+  @Min(1)
   maxTeamSize?: number;
 
   @IsOptional()
