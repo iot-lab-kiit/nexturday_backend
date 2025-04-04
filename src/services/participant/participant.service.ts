@@ -62,6 +62,7 @@ export class ParticipantService {
       phoneNumber,
       studyYear,
       whatsappNumber,
+      countryCodeWhatsapp,
       countryCode,
       firstname,
       lastname,
@@ -79,6 +80,7 @@ export class ParticipantService {
         studyYear,
         firstname,
         lastname,
+        countryCodeWhatsapp,
         countryCode,
         personalEmail,
         participant: {
@@ -94,6 +96,7 @@ export class ParticipantService {
         studyYear,
         firstname,
         lastname,
+        countryCodeWhatsapp,
         countryCode,
         personalEmail,
       },

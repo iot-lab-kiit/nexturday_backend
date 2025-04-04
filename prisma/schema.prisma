@@ -32,19 +32,20 @@ model Participant {
 }
 
 model ParticipantDetail {
-  id             String      @id @default(uuid())
-  firstname      String
-  lastname       String
-  branch         String
-  phoneNumber    String
-  countryCode    String
-  whatsappNumber String
-  studyYear      Int
-  personalEmail  String?
-  participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
-  participantId  String      @unique
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id                  String      @id @default(uuid())
+  firstname           String
+  lastname            String
+  branch              String
+  phoneNumber         String
+  countryCode         String
+  countryCodeWhatsapp String      @default("+91")
+  whatsappNumber      String
+  studyYear           Int
+  personalEmail       String?
+  participant         Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participantId       String      @unique
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 }
 
 model Society {

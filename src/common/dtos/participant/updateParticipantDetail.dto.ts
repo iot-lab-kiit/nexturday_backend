@@ -33,6 +33,11 @@ export class UpdateParticipantDetailDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsCountryCode()
+  countryCodeWhatsapp: string;
+
+  @IsNotEmpty()
+  @IsString()
   @Matches(/^\d+$/)
   @MinLength(9)
   @MaxLength(15)
