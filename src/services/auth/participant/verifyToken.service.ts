@@ -44,9 +44,9 @@ export class VerifyTokenService {
       throw new CustomError('fcm token invalid', 401);
     }
 
-    if (!user.email?.endsWith('@kiit.ac.in')) {
-      throw new CustomError('kiit email allowed', 401);
-    }
+    // if (!user.email?.endsWith('@kiit.ac.in')) {
+    //   throw new CustomError('kiit email allowed', 401);
+    // }
 
     const participant = await this.prisma.participant.findUnique({
       where: {
