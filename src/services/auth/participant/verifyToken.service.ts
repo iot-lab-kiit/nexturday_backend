@@ -25,7 +25,7 @@ export class VerifyTokenService {
     console.log("FCM TOKEN: ",dto.fcmToken);
     try {
       if (dto.fcmToken) {
-        await getMessaging().send(
+        const msg_id = await getMessaging().send(
           {
             token: dto.fcmToken,
             notification: {
@@ -33,11 +33,12 @@ export class VerifyTokenService {
               body: 'You have successfully logged in to the app',
             },
             android: {
-              priority: 'high',
+              priority: 'normal',
             },
           },
           // true,
         );
+        console.log('Message sent:', msg_id);
       }
     } catch (error) {
       throw new CustomError('fcm token invalid', 401);

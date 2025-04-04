@@ -31,9 +31,11 @@ export class NotificationService {
         tokens: tokens,
         notification: payload.notification,
       });
-      console.log('Successfully sent message:', response);
+      console.log('Successfully sent message:');
+      console.dir(response, { depth: null });
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message:');
+      console.dir(error, { depth: null });
     }
     if (all){
       try {

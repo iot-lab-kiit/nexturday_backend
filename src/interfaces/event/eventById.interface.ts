@@ -1,4 +1,5 @@
 import { IEvent } from './event.type';
+import { PaymentStatus } from '@prisma/client';
 
 export interface IEventById
   extends IEvent<{
@@ -24,4 +25,5 @@ export interface IEventById
   joined?: boolean;
   isFavorite?: boolean;
   isLeader?: boolean;
+  paymentStatus?: PaymentStatus;
 }

@@ -389,6 +389,9 @@ export class TeamService {
         if (!team.event.isOutsideParticipantAllowed && !participant.isKiitStudent) {
             throw new CustomError('event allowed for kiit students only', 400);
         }
+        if (team.event.paid && team.payment_status !== PaymentStatus.VERIFIED) {
+            throw new CustomError('payment not verified', 400);
+        }
         await this.prisma.teamMember.create({
             data: {
                 participantId,

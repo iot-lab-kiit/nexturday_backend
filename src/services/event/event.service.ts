@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PaymentStatus, PrismaClient } from '@prisma/client';
 import {
   IAllEvents,
   ICrousel,
@@ -202,7 +202,7 @@ export class EventService {
     let joined: boolean | undefined;
     let isFavorite: boolean | undefined;
     let isLeader: boolean | undefined;
-
+    let paymentStatus: PaymentStatus | undefined;
     const event = await this.prisma.event.findUnique({
       where: {
         id: eventId,
@@ -273,12 +273,13 @@ export class EventService {
       isFavorite = favorite ? true : false;
       joined = participation ? true : false;
       isLeader = participation?.leaderId === userId ? true : false;
+      paymentStatus = participation?.payment_status;
     }
 
     return {
       success: true,
       message: 'events fetched successfully',
-      data: { ...(event as IEventById), joined, isFavorite, isLeader },
+      data: { ...(event as IEventById), joined, isFavorite, isLeader, paymentStatus },
     };
   }
 
@@ -371,7 +372,7 @@ export class EventService {
         `A new event ${name} has been created`,
         true,
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.dir(e,{depth: null}));
 
     return {
       success: true,
