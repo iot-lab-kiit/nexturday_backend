@@ -40,8 +40,8 @@ export class EventDto {
   emails: string[];
 
   @IsOptional()
-  @IsUrl()
-  paymentQrUrl?: string;
+  // @IsUrl()
+  paymentQr?: string;
 
   @IsNotEmpty()
   @IsArray()
@@ -152,8 +152,8 @@ export class EventDto {
       }
       payload = { ...payload, details, paid } as EventDto;
     }
-    if (payload?.paymentQrUrl) {
-      this.paymentQrUrl = payload.paymentQrUrl;
+    if (payload?.paymentQr) {
+      this.paymentQr = payload.paymentQr;
     }
     Object.assign(this, payload);
   }

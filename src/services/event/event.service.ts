@@ -339,7 +339,7 @@ export class EventService {
           })),
         },
         ...(paymentQrData && {
-          paymentQrUrl: paymentQrData.url,
+          paymentQr: paymentQrData.url,
         }),
         tags,
         transcript,
@@ -501,7 +501,7 @@ export class EventService {
             },
           }),
         ...(paymentQrData && {
-          paymentQrUrl: paymentQrData.url,
+          paymentQr: paymentQrData.url,
         }),
         details: {
           create: details.map((detail) => ({
