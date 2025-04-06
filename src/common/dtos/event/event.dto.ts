@@ -114,6 +114,7 @@ export class EventDto {
   details: EventDetailDto[];
 
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @Min(1)
   maxTeamSize?: number;
