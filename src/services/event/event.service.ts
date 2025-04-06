@@ -380,6 +380,25 @@ export class EventService {
     };
   }
 
+  async updateTeamPaymentStatus(
+    teamId: string,
+    paymentStatus: PaymentStatus
+  ): Promise<IResponse> {
+    await this.prisma.team.update({
+      where: {
+        id: teamId,
+      },
+      data: {
+        payment_status: paymentStatus,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'payment status updated successfully',
+    };
+  }
+
   async updateEvent(
     dto: UpdateEventDto,
     images?: Express.Multer.File[],

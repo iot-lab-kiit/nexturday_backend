@@ -7,6 +7,7 @@ import {
   IParticipant,
   ISociety,
 } from '../../interfaces/express/user.interface';
+import { PaymentStatusUpdateDto } from '../../common/dtos';
 
 export class EventController {
   private eventService: EventService;
@@ -25,6 +26,24 @@ export class EventController {
         (req.user as IParticipant).isKiitStudent,
       );
       res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateTeamPaymentStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const teamId = req.params.id;
+      const dto = plainToInstance(PaymentStatusUpdateDto, {
+        teamId,
+        ...(req.body as Object),
+      });
+      const result = await this.eventService.updateTeamPaymentStatus(dto.teamId, dto.paymentStatus);
+      res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -63,9 +82,17 @@ export class EventController {
         societyId,
         ...(req.body as Object),
       });
-      const images = (req.files as { [fieldname: string]: Express.Multer.File[] })['images'];
-      const paymentQr = (req.files as { [fieldname: string]: Express.Multer.File[] })['paymentQr'];
-      const result = await this.eventService.createEvent(dto, images, paymentQr);
+      const images = (
+        req.files as { [fieldname: string]: Express.Multer.File[] }
+      )['images'];
+      const paymentQr = (
+        req.files as { [fieldname: string]: Express.Multer.File[] }
+      )['paymentQr'];
+      const result = await this.eventService.createEvent(
+        dto,
+        images,
+        paymentQr,
+      );
       res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -83,9 +110,17 @@ export class EventController {
         eventId,
         ...(req.body as Object),
       });
-      const images = (req.files as { [fieldname: string]: Express.Multer.File[] })['images'];
-      const paymentQr = (req.files as { [fieldname: string]: Express.Multer.File[] })['paymentQr'];
-      const result = await this.eventService.updateEvent(dto, images, paymentQr);
+      const images = (
+        req.files as { [fieldname: string]: Express.Multer.File[] }
+      )['images'];
+      const paymentQr = (
+        req.files as { [fieldname: string]: Express.Multer.File[] }
+      )['paymentQr'];
+      const result = await this.eventService.updateEvent(
+        dto,
+        images,
+        paymentQr,
+      );
       res.status(201).json(result);
     } catch (error) {
       next(error);

@@ -5,7 +5,7 @@ import {
   UploaderMiddleware,
   ValidationMiddleware,
 } from '../../middlewares';
-import { EventDto, SearchDto, UpdateEventDto } from '../../common/dtos';
+import { EventDto, PaymentStatusUpdateDto, SearchDto, UpdateEventDto } from '../../common/dtos';
 import { ParticipantRoute } from './participant';
 import { SocietyRoute } from './society';
 import { EventAuthMiddleware } from '../../middlewares/auth/event/society';
@@ -57,6 +57,11 @@ export class EventRoute {
       ]),
       new ValidationMiddleware([EventDto, 'body']).validate,
       this.eventController.createEvent,
+    );
+    this.router.post(
+      '/:id/payment-status',
+      // new ValidationMiddleware([PaymentStatusUpdateDto, 'body']).validate,
+      this.eventController.updateTeamPaymentStatus,
     );
     this.router.patch(
       '/:id',
