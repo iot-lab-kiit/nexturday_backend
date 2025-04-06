@@ -29,8 +29,8 @@ export class VerifyTokenService {
           {
             token: dto.fcmToken,
             notification: {
-              title: 'Successfully Logged In',
-              body: 'You have successfully logged in to the app',
+              title: 'Successfully Logged In to Nexturday',
+              body: 'You have successfully logged in to the Nexturday',
             },
             android: {
               priority: 'normal',
