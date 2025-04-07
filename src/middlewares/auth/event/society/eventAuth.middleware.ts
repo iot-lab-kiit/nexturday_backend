@@ -28,7 +28,7 @@ export class EventAuthMiddleware {
         },
       });
       if (!event) {
-        throw new CustomError('Unauthorized Exception', 401);
+        throw new CustomError('Unauthorized Exception 2', 401);
       }
       next();
     } catch (error) {

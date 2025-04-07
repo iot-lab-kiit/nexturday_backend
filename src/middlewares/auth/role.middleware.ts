@@ -14,7 +14,7 @@ export class RoleMiddleware {
     try {
       const authorized = this.roles.some((role) => req.user?.role === role);
       if (!authorized) {
-        throw new CustomError('Unauthorized Exception', 401);
+        throw new CustomError('Unauthorized Exception 1', 401);
       }
       next();
     } catch (error) {
