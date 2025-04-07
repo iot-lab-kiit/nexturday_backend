@@ -96,7 +96,6 @@ export class EventDto {
   paid: boolean;
 
   @IsNotEmpty()
-  @IsString()
   @Transform(({ value }) => {
     console.log('value', value);
     if (typeof value === 'string') {
