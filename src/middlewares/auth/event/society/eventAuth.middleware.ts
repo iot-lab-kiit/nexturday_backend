@@ -23,8 +23,8 @@ export class EventAuthMiddleware {
       }
       const event = await this.prisma.event.findUnique({
         where: {
-          id: eventId,
-          societyId,
+          id: eventId
+          // societyId,
         },
       });
       if (!event) {
