@@ -96,10 +96,14 @@ export class EventDto {
   paid: boolean;
 
   @IsNotEmpty()
-  @Transform(({ value }) => value.split(',').map((tag: string) => tag.trim()))
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
+  @IsString()
+  @Transform(({ value }) => {
+    console.log('value', value);
+    if (typeof value === 'string') {
+      return value.split(',').map((tag: string) => tag.trim());
+    }
+    return value;
+  })
   tags: string[];
 
   @IsOptional()
