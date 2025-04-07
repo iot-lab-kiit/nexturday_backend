@@ -368,8 +368,8 @@ export class EventService {
 
     this.notificationService
       .sendNotification(
-        'New Upcoming Event',
-        `A new event ${name} has been created`,
+        `Upcoming Event: "${name}"`,
+        `A new event has been added for ${this.formatDate(from)}. Tap to view details and RSVP!`,
         true,
       )
       .catch((e) => console.dir(e,{depth: null}));
@@ -378,6 +378,17 @@ export class EventService {
       success: true,
       message: 'event created successfully',
     };
+  }
+
+  formatDate(date: Date): string {
+    return date.toLocaleString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
   }
 
   async updateTeamPaymentStatus(
