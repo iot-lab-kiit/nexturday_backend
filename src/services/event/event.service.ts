@@ -431,6 +431,7 @@ export class EventService {
       maxTeamSize,
       imagesKeys,
       eventId,
+      tags,
     } = dto;
     const event = await this.prisma.event.findUnique({
       where: {
@@ -519,6 +520,7 @@ export class EventService {
         websiteUrl,
         phoneNumbers,
         price,
+        tags,
         maxTeamSize,
         registrationUrl,
         ...(images &&

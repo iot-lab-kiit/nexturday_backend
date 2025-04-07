@@ -96,6 +96,7 @@ export class EventDto {
   paid: boolean;
 
   @IsNotEmpty()
+  @Transform(({ value }) => value.split(',').map((tag: string) => tag.trim()))
   @IsArray()
   @ArrayNotEmpty()
   @IsString({ each: true })
