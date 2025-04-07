@@ -91,6 +91,7 @@ export class SocietyService {
     eventId: string,
     dto: SearchDto,
   ): Promise<IResponse<IPaginatedData<IEventParticipant>>> {
+    console.log('eventId', eventId);
     const totalTeams = await this.prisma.team.count({
       where: {
         eventId,
@@ -178,7 +179,7 @@ export class SocietyService {
         },
       },
     });
-
+    console.log('teams', teams);
     return {
       success: true,
       message: 'participants fetched successfully',

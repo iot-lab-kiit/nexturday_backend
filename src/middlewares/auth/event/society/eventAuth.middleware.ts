@@ -20,6 +20,7 @@ export class EventAuthMiddleware {
       const eventId = req.params.id;
       if (req.user?.role === 'ADMIN') {
         next();
+        return;
       }
       const event = await this.prisma.event.findUnique({
         where: {

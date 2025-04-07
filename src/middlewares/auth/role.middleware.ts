@@ -12,7 +12,11 @@ export class RoleMiddleware {
 
   async verify(req: Request, res: Response, next: NextFunction) {
     try {
-      const authorized = this.roles.some((role) => req.user?.role === role);
+      let authorized: boolean = false;
+      if (req.user?.role !== 'ADMIN')
+          authorized = this.roles.some((role) => req.user?.role === role);
+      else
+          authorized = true;
       if (!authorized) {
         throw new CustomError('Unauthorized Exception 1', 401);
       }

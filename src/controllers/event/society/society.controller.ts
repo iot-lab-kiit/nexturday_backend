@@ -17,7 +17,7 @@ export class SocietyController {
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<void> {
+  ) {
     try {
       const societyId = (req.user as ISociety).sub;
       const dto = plainToInstance(SearchDto, req.query);
@@ -32,7 +32,7 @@ export class SocietyController {
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<void> {
+  ) {
     try {
       const eventId = req.params.id;
       const dto = plainToInstance(SearchDto, req.query);
