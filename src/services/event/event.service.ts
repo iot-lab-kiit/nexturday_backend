@@ -229,9 +229,13 @@ export class EventService {
         transcript: role === 'PARTICIPANT' ? true : false,
       },
     });
-
-    if (!event || (!(event.societyId === userId) && !event.isApproved)) {
+    if (!event) {
       throw new CustomError('event not found', 404);
+    }
+    if (role !== 'ADMIN') {
+      if (!(event.societyId === userId) && !event.isApproved) {
+        throw new CustomError('event not found', 404);
+      }
     }
 
     if (!isKiitStudent && !event.isOutsideParticipantAllowed) {
@@ -279,14 +283,20 @@ export class EventService {
     return {
       success: true,
       message: 'events fetched successfully',
-      data: { ...(event as IEventById), joined, isFavorite, isLeader, paymentStatus },
+      data: {
+        ...(event as IEventById),
+        joined,
+        isFavorite,
+        isLeader,
+        paymentStatus,
+      },
     };
   }
 
   async createEvent(
     dto: EventDto,
     images?: Express.Multer.File[],
-    paymentQr?: Express.Multer.File[]
+    paymentQr?: Express.Multer.File[],
   ): Promise<IResponse> {
     const {
       emails,
@@ -372,7 +382,7 @@ export class EventService {
         `A new event has been added for ${this.formatDate(from)}. Tap to view details and RSVP!`,
         true,
       )
-      .catch((e) => console.dir(e,{depth: null}));
+      .catch((e) => console.dir(e, { depth: null }));
 
     return {
       success: true,
@@ -393,7 +403,7 @@ export class EventService {
 
   async updateTeamPaymentStatus(
     teamId: string,
-    paymentStatus: PaymentStatus
+    paymentStatus: PaymentStatus,
   ): Promise<IResponse> {
     await this.prisma.team.update({
       where: {
@@ -413,7 +423,7 @@ export class EventService {
   async updateEvent(
     dto: UpdateEventDto,
     images?: Express.Multer.File[],
-    paymentQr?: Express.Multer.File[]
+    paymentQr?: Express.Multer.File[],
   ): Promise<IResponse> {
     const {
       emails,
